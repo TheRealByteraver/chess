@@ -36,14 +36,14 @@ const getFenGame = (fen: string): ChessGame | undefined => {
   };
 
   const enPassantMap: Record<string, number> = {
-    h: 0,
-    g: 8,
-    f: 16,
-    e: 24,
-    d: 32,
-    c: 40,
-    b: 48,
-    a: 56,
+    a: 0,
+    b: 1,
+    c: 2,
+    d: 3,
+    e: 4,
+    f: 5,
+    g: 6,
+    h: 7,
   };
 
   const BOARDSECTION = 0;
@@ -106,9 +106,9 @@ const getFenGame = (fen: string): ChessGame | undefined => {
 
   if (enPassantInfo !== '-') {
     if (enPassantInfo.length !== 2) return undefined;
-    const row = enPassantInfo[0];
-    const column = enPassantInfo[1];
-    enPassant = enPassantMap[row] + Number(column) - 1;
+    const column = enPassantInfo[0];
+    const row = Number(enPassantInfo[1]);
+    enPassant = (8 - row) * 8 + enPassantMap[column];
   }
 
   const halfMoveClock = Number(fenSections[HALFMOVECLOCKSECTION]);

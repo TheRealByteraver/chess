@@ -54,7 +54,7 @@ const ChessSquare = ({ piece, squareColor }: Props): JSX.Element => {
   };
 
   return (
-    <div className={`${squareColor} relative w-20 h-20`}>
+    <div className={`${squareColor} hover:bg-slate-200 relative w-20 h-20`}>
       {piece !== EMPTY && (
         <Image
           src={pieces[piece].image}
