@@ -15,13 +15,20 @@ import blackKing from '@/src/media/chessPieces/blackKing.svg';
 import Image from 'next/image';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import { CHESSPIECES, EMPTY } from '@/src/utils/constants';
+import getClassName from '@/src/utils/general/classNames';
 
 type Props = {
+  interactive: boolean;
   piece: number;
   squareColor: string;
+  size: 'icon' | 'normal';
+  onClick?: () => void;
 };
 
-const ChessSquare = ({ piece, squareColor }: Props): JSX.Element => {
+const ChessSquare = (props: Props): JSX.Element => {
+  // PROPS
+  const { interactive, size, piece, squareColor, onClick } = props;
+
   // VARS
   const {
     BLACKBISHOP,
@@ -53,16 +60,26 @@ const ChessSquare = ({ piece, squareColor }: Props): JSX.Element => {
     [BLACKKING]: { image: blackKing, name: 'black king' },
   };
 
+  const sizeCss = size === 'icon' ? 'w-8 h-8' : 'w-20 h-20';
+  const hoverCss = getClassName([
+    'absolute top-0 left-0',
+    sizeCss,
+    interactive ? 'hover:bg-yellow-400 hover:bg-opacity-80' : '',
+  ]);
+  const classes = getClassName([sizeCss, squareColor, 'relative']);
+
   return (
-    <div className={`${squareColor} hover:bg-slate-200 relative w-20 h-20`}>
-      {piece !== EMPTY && (
-        <Image
-          src={pieces[piece].image}
-          alt={pieces[piece].name}
-          fill
-          priority
-        />
-      )}
+    <div className={classes} onClick={onClick}>
+      <div className={hoverCss}>
+        {piece !== EMPTY && (
+          <Image
+            src={pieces[piece].image}
+            alt={pieces[piece].name}
+            fill
+            priority
+          />
+        )}
+      </div>
     </div>
   );
 };

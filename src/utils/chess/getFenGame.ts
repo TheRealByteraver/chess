@@ -4,7 +4,7 @@
 import { ChessGame, ChessPiece } from '@/src/types/chess';
 import { CHESSPIECES, EMPTY } from '../constants';
 
-const getFenGame = (fen: string): ChessGame | undefined => {
+const getFenGame = (fen: string): ChessGame => {
   const {
     WHITEPAWN,
     WHITEROOK,
@@ -54,10 +54,10 @@ const getFenGame = (fen: string): ChessGame | undefined => {
   const FULLMOVENUMBERSECTION = 5;
 
   const fenSections = fen.split(' ');
-  if (fenSections.length !== 6) return undefined;
+  // if (fenSections.length !== 6) return undefined;
 
   const fenRows = fenSections[BOARDSECTION].split('/') ?? [];
-  if (fenRows.length !== 8) return undefined;
+  // if (fenRows.length !== 8) return undefined;
 
   const board: number[] = [];
   fenRows.forEach((fenRow) => {
@@ -68,7 +68,7 @@ const getFenGame = (fen: string): ChessGame | undefined => {
         for (let s = 0; s < skip; s++) board.push(EMPTY);
       } else {
         const piece = fenMap[char as ChessPiece];
-        if (!piece) return undefined;
+        // if (!piece) return undefined;
         board.push(piece);
       }
     }
@@ -105,7 +105,7 @@ const getFenGame = (fen: string): ChessGame | undefined => {
   let enPassant: number | undefined = undefined;
 
   if (enPassantInfo !== '-') {
-    if (enPassantInfo.length !== 2) return undefined;
+    // if (enPassantInfo.length !== 2) return undefined;
     const column = enPassantInfo[0];
     const row = Number(enPassantInfo[1]);
     enPassant = (8 - row) * 8 + enPassantMap[column];
@@ -113,7 +113,7 @@ const getFenGame = (fen: string): ChessGame | undefined => {
 
   const halfMoveClock = Number(fenSections[HALFMOVECLOCKSECTION]);
   const fullMoveNumber = Number(fenSections[FULLMOVENUMBERSECTION]);
-  if (isNaN(halfMoveClock) || isNaN(fullMoveNumber)) return undefined;
+  // if (isNaN(halfMoveClock) || isNaN(fullMoveNumber)) return undefined;
 
   return {
     board,

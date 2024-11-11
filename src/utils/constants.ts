@@ -1,3 +1,5 @@
+const FENSTART = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
 const EMPTY = 0;
 const PAWN = 1;
 const ROOK = 2;
@@ -36,6 +38,7 @@ const CHESSPIECES = {
 };
 
 export {
+  FENSTART,
   CHESSPIECES,
   BLACK,
   EMPTY,

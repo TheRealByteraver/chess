@@ -1,22 +1,48 @@
+'use client';
+
+import { ChessGame, GameState } from '@/src/types/chess';
+import { Button, Container, Header1 } from '@/src/ui/atoms';
 import ChessBoard from '@/src/ui/molecules/ChessBoard';
 import getFenGame from '@/src/utils/chess/getFenGame';
+import { FENSTART } from '@/src/utils/constants';
+import { useState } from 'react';
 
 const Chess = (): JSX.Element => {
-  const fenStart = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-  const fen = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq c3 1 2';
+  // STATE
+  const [gameState, setGameState] = useState<GameState>('begin');
+  const [game, updateGame] = useState<ChessGame>(getFenGame(FENSTART));
+  const [selectedSquare, setSelectedSquare] = useState<number | null>(null);
 
-  const chessGame = getFenGame(fen);
-  console.log('chessGame', chessGame);
+  // METHODS
+  const startGameHandler = () => {
+    setGameState('waitingForUser');
+  };
+
+  const playerMoveHandler = (square: number) => {
+    console.log('Player clicked square:', square);
+  };
 
   return (
-    <div className="relative">
-      <h1>hello, chess page</h1>
+    <Container hCenter vCenter>
+      <Header1 text="Welcome to the chess bot!" />
+      {gameState === 'begin' ? (
+        <Button className="mb-6" onClick={startGameHandler}>
+          Start a new Game
+        </Button>
+      ) : (
+        <p className="mb-6">Game state: {gameState}</p>
+      )}
+
       <div className="inline-block border-8 border-[#d28c45]">
-        {chessGame && (
-          <ChessBoard board={chessGame.board} orientation="whiteOnBottom" />
+        {game && (
+          <ChessBoard
+            board={game.board}
+            orientation="blackOnBottom"
+            onClick={playerMoveHandler}
+          />
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 

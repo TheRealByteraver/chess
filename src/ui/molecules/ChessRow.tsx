@@ -3,14 +3,17 @@ import ChessSquare from './ChessSquare';
 import { ChessGame } from '@/src/types/chess';
 
 type Props = {
+  interactive: boolean;
   board: ChessGame['board'];
+  size: 'icon' | 'normal';
   rowNumber: number;
   mirrored: boolean;
+  onClick?: (square: number) => void;
 };
 
 const Row = (props: Props): JSX.Element => {
   // PROPS
-  const { board, rowNumber, mirrored } = props;
+  const { interactive, board, size, rowNumber, mirrored, onClick } = props;
 
   // VARS
   const squareNr = rowNumber * 8;
@@ -20,8 +23,11 @@ const Row = (props: Props): JSX.Element => {
     squares.push(
       <ChessSquare
         key={index}
+        interactive={interactive}
+        size={size}
         piece={board[index]}
         squareColor={getBgColor(index)}
+        onClick={onClick ? () => onClick(index) : undefined}
       />
     );
   }

@@ -4,23 +4,45 @@
 
 import { ChessGame, Orientation } from '@/src/types/chess';
 import Row from './ChessRow';
+import getClassName from '@/src/utils/general/classNames';
 
-type Props = { board: ChessGame['board']; orientation: Orientation };
+type Props = {
+  interactive?: boolean;
+  board: ChessGame['board'];
+  orientation: Orientation;
+  size?: 'icon' | 'normal';
+  onClick?: (square: number) => void;
+};
 
 const ChessBoard = (props: Props): JSX.Element => {
   // PROPS
-  const { board, orientation } = props;
+  const {
+    size = 'normal',
+    interactive = true,
+    board,
+    orientation,
+    onClick,
+  } = props;
 
   // METHODS
-  const Rows = ({ mirrored }: { mirrored: boolean }): JSX.Element => {
+  const Rows = ({
+    size,
+    mirrored,
+  }: {
+    size: 'icon' | 'normal';
+    mirrored: boolean;
+  }): JSX.Element => {
     const rows: JSX.Element[] = [];
     for (let rowIndex = 0; rowIndex < 8; rowIndex++)
       rows.push(
         <Row
+          interactive={interactive}
           key={rowIndex}
+          size={size}
           board={board}
           rowNumber={rowIndex}
           mirrored={mirrored}
+          onClick={onClick}
         />
       );
 
@@ -34,7 +56,7 @@ const ChessBoard = (props: Props): JSX.Element => {
   // VARS
   const mirrored = orientation === 'blackOnBottom';
 
-  return <Rows mirrored={mirrored} />;
+  return <Rows size={size} mirrored={mirrored} />;
 };
 
 export default ChessBoard;
