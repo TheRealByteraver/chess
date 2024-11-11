@@ -14,7 +14,22 @@ import blackKing from '@/src/media/chessPieces/blackKing.svg';
 
 import Image from 'next/image';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import { CHESSPIECES, EMPTY } from '@/src/utils/constants';
+import {
+  BLACKBISHOP,
+  BLACKKING,
+  BLACKKNIGHT,
+  BLACKPAWN,
+  BLACKQUEEN,
+  BLACKROOK,
+  CHESSPIECENAMES,
+  EMPTY,
+  WHITEBISHOP,
+  WHITEKING,
+  WHITEKNIGHT,
+  WHITEPAWN,
+  WHITEQUEEN,
+  WHITEROOK,
+} from '@/src/utils/constants';
 import getClassName from '@/src/utils/general/classNames';
 
 type Props = {
@@ -29,35 +44,19 @@ const ChessSquare = (props: Props): JSX.Element => {
   // PROPS
   const { interactive, size, piece, squareColor, onClick } = props;
 
-  // VARS
-  const {
-    BLACKBISHOP,
-    BLACKKING,
-    BLACKKNIGHT,
-    BLACKPAWN,
-    BLACKQUEEN,
-    BLACKROOK,
-    WHITEBISHOP,
-    WHITEKING,
-    WHITEKNIGHT,
-    WHITEPAWN,
-    WHITEQUEEN,
-    WHITEROOK,
-  } = CHESSPIECES;
-
-  const pieces: Record<number, { image: StaticImport; name: string }> = {
-    [WHITEPAWN]: { image: whitePawn, name: 'white pawn' },
-    [WHITEKNIGHT]: { image: whiteKnight, name: 'white knight' },
-    [WHITEBISHOP]: { image: whiteBishop, name: 'white bishop' },
-    [WHITEROOK]: { image: whiteRook, name: 'white rook' },
-    [WHITEQUEEN]: { image: whiteQueen, name: 'white queen' },
-    [WHITEKING]: { image: whiteKing, name: 'white king' },
-    [BLACKPAWN]: { image: blackPawn, name: 'black pawn' },
-    [BLACKKNIGHT]: { image: blackKnight, name: 'black knight' },
-    [BLACKBISHOP]: { image: blackBishop, name: 'black bishop' },
-    [BLACKROOK]: { image: blackRook, name: 'black rook' },
-    [BLACKQUEEN]: { image: blackQueen, name: 'black queen' },
-    [BLACKKING]: { image: blackKing, name: 'black king' },
+  const pieces: Record<number, StaticImport> = {
+    [WHITEPAWN]: whitePawn,
+    [WHITEKNIGHT]: whiteKnight,
+    [WHITEBISHOP]: whiteBishop,
+    [WHITEROOK]: whiteRook,
+    [WHITEQUEEN]: whiteQueen,
+    [WHITEKING]: whiteKing,
+    [BLACKPAWN]: blackPawn,
+    [BLACKKNIGHT]: blackKnight,
+    [BLACKBISHOP]: blackBishop,
+    [BLACKROOK]: blackRook,
+    [BLACKQUEEN]: blackQueen,
+    [BLACKKING]: blackKing,
   };
 
   const sizeCss = size === 'icon' ? 'w-8 h-8' : 'w-20 h-20';
@@ -72,12 +71,7 @@ const ChessSquare = (props: Props): JSX.Element => {
     <div className={classes} onClick={onClick}>
       <div className={hoverCss}>
         {piece !== EMPTY && (
-          <Image
-            src={pieces[piece].image}
-            alt={pieces[piece].name}
-            fill
-            priority
-          />
+          <Image src={pieces[piece]} alt={CHESSPIECENAMES[piece]} fill />
         )}
       </div>
     </div>

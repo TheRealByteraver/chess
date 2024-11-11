@@ -1,6 +1,6 @@
 import { getFenGame } from '@/src/utils/chess';
 import ChessBoard from './ChessBoard';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChessEmptyBoard from './ChessEmptyBoard';
 
 const ChessGameIcon = (): JSX.Element => {

@@ -4,14 +4,14 @@ import { ChessGame, GameState } from '@/src/types/chess';
 import { Button, Container, Header1 } from '@/src/ui/atoms';
 import ChessBoard from '@/src/ui/molecules/ChessBoard';
 import getFenGame from '@/src/utils/chess/getFenGame';
-import { FENSTART } from '@/src/utils/constants';
+import { CHESSPIECENAMES, FENSTART } from '@/src/utils/constants';
 import { useState } from 'react';
 
 const Chess = (): JSX.Element => {
   // STATE
   const [gameState, setGameState] = useState<GameState>('begin');
-  const [game, updateGame] = useState<ChessGame>(getFenGame(FENSTART));
-  const [selectedSquare, setSelectedSquare] = useState<number | null>(null);
+  const [game /*, updateGame */] = useState<ChessGame>(getFenGame(FENSTART));
+  // const [selectedSquare, setSelectedSquare] = useState<number | null>(null);
 
   // METHODS
   const startGameHandler = () => {
@@ -20,6 +20,7 @@ const Chess = (): JSX.Element => {
 
   const playerMoveHandler = (square: number) => {
     console.log('Player clicked square:', square);
+    console.log('Selected square:', CHESSPIECENAMES[game.board[square]]);
   };
 
   return (

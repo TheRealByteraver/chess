@@ -15,7 +15,7 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     if (gameType === 'chess') router.push('/chess');
-  }, [gameType]);
+  }, [gameType, router]);
 
   return (
     <Container hCenter vCenter>

@@ -22,24 +22,25 @@ const BLACKBISHOP = BISHOP | BLACK;
 const BLACKQUEEN = QUEEN | BLACK;
 const BLACKKING = KING | BLACK;
 
-const CHESSPIECES = {
-  WHITEPAWN,
-  WHITEROOK,
-  WHITEKNIGHT,
-  WHITEBISHOP,
-  WHITEQUEEN,
-  WHITEKING,
-  BLACKPAWN,
-  BLACKROOK,
-  BLACKKNIGHT,
-  BLACKBISHOP,
-  BLACKQUEEN,
-  BLACKKING,
+const CHESSPIECENAMES = {
+  [EMPTY]: '',
+  [WHITEPAWN]: 'white pawn',
+  [WHITEROOK]: 'white rook',
+  [WHITEKNIGHT]: 'white knight',
+  [WHITEBISHOP]: 'white bishop',
+  [WHITEQUEEN]: 'white queen',
+  [WHITEKING]: 'white king',
+  [BLACKPAWN]: 'black pawn',
+  [BLACKROOK]: 'black rook',
+  [BLACKKNIGHT]: 'black knight',
+  [BLACKBISHOP]: 'black bishop',
+  [BLACKQUEEN]: 'black queen',
+  [BLACKKING]: 'black king',
 };
 
 export {
   FENSTART,
-  CHESSPIECES,
+  CHESSPIECENAMES,
   BLACK,
   EMPTY,
   PAWN,

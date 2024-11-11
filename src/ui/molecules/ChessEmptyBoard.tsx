@@ -19,6 +19,7 @@ const ChessEmptyBoard = (props: Props): JSX.Element => {
       for (let columnIndex = 0; columnIndex < 8; columnIndex++) {
         squares.push(
           <ChessSquare
+            interactive={false}
             key={rowIndex * 8 + columnIndex}
             size={size}
             piece={EMPTY}

@@ -1,26 +1,39 @@
 // FEN spec: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation#cite_note-pgn_spec-1
 // FEN start pos: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 
-import { ChessGame, ChessPiece } from '@/src/types/chess';
-import { CHESSPIECES, EMPTY } from '../constants';
+type FenChessPiece =
+  | 'P'
+  | 'N'
+  | 'B'
+  | 'R'
+  | 'Q'
+  | 'K'
+  | 'p'
+  | 'n'
+  | 'b'
+  | 'r'
+  | 'q'
+  | 'k';
+
+import { ChessGame } from '@/src/types/chess';
+import {
+  BLACKBISHOP,
+  BLACKKING,
+  BLACKKNIGHT,
+  BLACKPAWN,
+  BLACKQUEEN,
+  BLACKROOK,
+  EMPTY,
+  WHITEBISHOP,
+  WHITEKING,
+  WHITEKNIGHT,
+  WHITEPAWN,
+  WHITEQUEEN,
+  WHITEROOK,
+} from '../constants';
 
 const getFenGame = (fen: string): ChessGame => {
-  const {
-    WHITEPAWN,
-    WHITEROOK,
-    WHITEKNIGHT,
-    WHITEBISHOP,
-    WHITEQUEEN,
-    WHITEKING,
-    BLACKPAWN,
-    BLACKROOK,
-    BLACKKNIGHT,
-    BLACKBISHOP,
-    BLACKQUEEN,
-    BLACKKING,
-  } = CHESSPIECES;
-
-  const fenMap: Record<ChessPiece, number> = {
+  const fenMap: Record<FenChessPiece, number> = {
     P: WHITEPAWN,
     N: WHITEKNIGHT,
     B: WHITEBISHOP,
@@ -67,7 +80,7 @@ const getFenGame = (fen: string): ChessGame => {
       if (skip >= 1 && skip <= 8) {
         for (let s = 0; s < skip; s++) board.push(EMPTY);
       } else {
-        const piece = fenMap[char as ChessPiece];
+        const piece = fenMap[char as FenChessPiece];
         // if (!piece) return undefined;
         board.push(piece);
       }
