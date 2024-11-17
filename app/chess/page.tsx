@@ -19,7 +19,8 @@ import { useState } from 'react';
 
 const Chess = (): JSX.Element => {
   // STATE
-  const [gameState, setGameState] = useState<GameState>('begin');
+  // const [gameState, setGameState] = useState<GameState>('begin');
+  const [gameState, setGameState] = useState<GameState>('waitingForUser'); // debug
   const [gameInfo, setGameInfo] = useState<ChessGameInfo>(getNewGame());
 
   // METHODS
