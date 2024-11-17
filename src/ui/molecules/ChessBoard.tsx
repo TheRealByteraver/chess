@@ -1,9 +1,10 @@
-import { ChessGame, Orientation } from '@/src/types/chess';
+import { ChessGame, ChessGameInfo, Orientation } from '@/src/types/chess';
 import Row from './ChessRow';
 
 type Props = {
   interactive?: boolean;
   board: ChessGame['board'];
+  boardMarkers?: ChessGameInfo['boardMarkers'];
   orientation: Orientation;
   size?: 'icon' | 'normal';
   onClick?: (square: number) => void;
@@ -15,6 +16,7 @@ const ChessBoard = (props: Props): JSX.Element => {
     size = 'normal',
     interactive = true,
     board,
+    boardMarkers,
     orientation,
     onClick,
   } = props;
@@ -35,6 +37,7 @@ const ChessBoard = (props: Props): JSX.Element => {
           key={rowIndex}
           size={size}
           board={board}
+          boardMarkers={boardMarkers}
           rowNumber={rowIndex}
           mirrored={mirrored}
           onClick={onClick}

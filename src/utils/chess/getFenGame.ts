@@ -1,21 +1,7 @@
 // FEN spec: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation#cite_note-pgn_spec-1
 // FEN start pos: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 
-type FenChessPiece =
-  | 'P'
-  | 'N'
-  | 'B'
-  | 'R'
-  | 'Q'
-  | 'K'
-  | 'p'
-  | 'n'
-  | 'b'
-  | 'r'
-  | 'q'
-  | 'k';
-
-import { ChessGame } from '@/src/types/chess';
+import { ChessGame, ChessPieceType } from '@/src/types/chess';
 import {
   BLACKBISHOP,
   BLACKKING,
@@ -31,6 +17,21 @@ import {
   WHITEQUEEN,
   WHITEROOK,
 } from '../constants';
+import { ArrayOf64 } from '@/src/types/generic';
+
+type FenChessPiece =
+  | 'P'
+  | 'N'
+  | 'B'
+  | 'R'
+  | 'Q'
+  | 'K'
+  | 'p'
+  | 'n'
+  | 'b'
+  | 'r'
+  | 'q'
+  | 'k';
 
 const getFenGame = (fen: string): ChessGame => {
   const fenMap: Record<FenChessPiece, number> = {
@@ -72,17 +73,20 @@ const getFenGame = (fen: string): ChessGame => {
   const fenRows = fenSections[BOARDSECTION].split('/') ?? [];
   // if (fenRows.length !== 8) return undefined;
 
-  const board: number[] = [];
-  fenRows.forEach((fenRow) => {
+  const board = Array(64).fill(EMPTY) as ArrayOf64<ChessPieceType>;
+
+  fenRows.forEach((fenRow, rowIndex) => {
+    let columnIndex = 0;
     for (let i = 0; i < fenRow.length; i++) {
       const char = fenRow[i];
       const skip = Number(char);
       if (skip >= 1 && skip <= 8) {
-        for (let s = 0; s < skip; s++) board.push(EMPTY);
+        columnIndex += skip;
       } else {
         const piece = fenMap[char as FenChessPiece];
         // if (!piece) return undefined;
-        board.push(piece);
+        board[rowIndex * 8 + columnIndex] = piece;
+        columnIndex++;
       }
     }
   });

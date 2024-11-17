@@ -1,77 +1,65 @@
-// svg's taken from https://commons.wikimedia.org/wiki/Template:SVG_chess_pieces
-import whitePawn from '@/src/media/chessPieces/whitePawn.svg';
-import whiteKnight from '@/src/media/chessPieces/whiteKnight.svg';
-import whiteBishop from '@/src/media/chessPieces/whiteBishop.svg';
-import whiteRook from '@/src/media/chessPieces/whiteRook.svg';
-import whiteQueen from '@/src/media/chessPieces/whiteQueen.svg';
-import whiteKing from '@/src/media/chessPieces/whiteKing.svg';
-import blackPawn from '@/src/media/chessPieces/blackPawn.svg';
-import blackKnight from '@/src/media/chessPieces/blackKnight.svg';
-import blackBishop from '@/src/media/chessPieces/blackBishop.svg';
-import blackRook from '@/src/media/chessPieces/blackRook.svg';
-import blackQueen from '@/src/media/chessPieces/blackQueen.svg';
-import blackKing from '@/src/media/chessPieces/blackKing.svg';
-
 import Image from 'next/image';
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+
 import {
-  BLACKBISHOP,
-  BLACKKING,
-  BLACKKNIGHT,
-  BLACKPAWN,
-  BLACKQUEEN,
-  BLACKROOK,
-  CHESSPIECENAMES,
+  BOARDDEFAULT,
   EMPTY,
-  WHITEBISHOP,
-  WHITEKING,
-  WHITEKNIGHT,
-  WHITEPAWN,
-  WHITEQUEEN,
-  WHITEROOK,
+  POSSIBLEMOVE,
+  SELECTEDPIECE,
 } from '@/src/utils/constants';
 import getClassName from '@/src/utils/general/classNames';
+import SVGPieces from '@/src/media/chessPieces/SVGPieces';
+import { PlayerColor, SquareMarkerType } from '@/src/types/chess';
 
 type Props = {
   interactive: boolean;
   piece: number;
-  squareColor: string;
+  marker?: SquareMarkerType;
+  squareColor: PlayerColor;
   size: 'icon' | 'normal';
   onClick?: () => void;
 };
 
 const ChessSquare = (props: Props): JSX.Element => {
   // PROPS
-  const { interactive, size, piece, squareColor, onClick } = props;
+  const {
+    interactive,
+    size,
+    piece,
+    marker = BOARDDEFAULT,
+    squareColor,
+    onClick,
+  } = props;
 
-  const pieces: Record<number, StaticImport> = {
-    [WHITEPAWN]: whitePawn,
-    [WHITEKNIGHT]: whiteKnight,
-    [WHITEBISHOP]: whiteBishop,
-    [WHITEROOK]: whiteRook,
-    [WHITEQUEEN]: whiteQueen,
-    [WHITEKING]: whiteKing,
-    [BLACKPAWN]: blackPawn,
-    [BLACKKNIGHT]: blackKnight,
-    [BLACKBISHOP]: blackBishop,
-    [BLACKROOK]: blackRook,
-    [BLACKQUEEN]: blackQueen,
-    [BLACKKING]: blackKing,
+  // METHODS
+  const getBackgroundColor = (marker: SquareMarkerType): string => {
+    if (marker === SELECTEDPIECE) return 'bg-yellow-500';
+    if (marker === POSSIBLEMOVE) {
+      if (squareColor === 'white') return 'bg-[#c8d496]';
+      else return 'bg-[#a9a556]';
+    }
+    if (squareColor === 'white') return 'bg-[#ffcf9f]';
+    else return 'bg-[#d28c45]';
   };
 
+  // VARS
   const sizeCss = size === 'icon' ? 'w-8 h-8' : 'w-20 h-20';
+  const backgroundColor = getBackgroundColor(marker);
   const hoverCss = getClassName([
     'absolute top-0 left-0',
     sizeCss,
     interactive ? 'hover:bg-yellow-400 hover:bg-opacity-80' : '',
   ]);
-  const classes = getClassName([sizeCss, squareColor, 'relative']);
+  const className = getClassName([sizeCss, backgroundColor, 'relative']);
 
   return (
-    <div className={classes} onClick={onClick}>
+    <div className={className} onClick={onClick}>
       <div className={hoverCss}>
         {piece !== EMPTY && (
-          <Image src={pieces[piece]} alt={CHESSPIECENAMES[piece]} fill />
+          <Image
+            src={SVGPieces[piece].image}
+            alt={SVGPieces[piece].name}
+            fill
+          />
         )}
       </div>
     </div>

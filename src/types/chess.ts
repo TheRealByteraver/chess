@@ -1,6 +1,13 @@
+import { PIECES, SQUAREMARKERS } from '../utils/constants';
+import { ArrayOf64 } from './generic';
+
+type ChessPieceType = (typeof PIECES)[number];
+
+type SquareMarkerType = (typeof SQUAREMARKERS)[number];
+
 type Orientation = 'whiteOnBottom' | 'blackOnBottom';
 
-type GameType = 'none' | 'chess';
+type PlayerColor = 'white' | 'black';
 
 type GameState =
   | 'begin'
@@ -12,8 +19,8 @@ type GameState =
 
 // attention: square 0 is A8, square 63 is H1
 type ChessGame = {
-  board: number[]; // 0-63
-  activeColor: 'white' | 'black';
+  board: ArrayOf64<ChessPieceType>;
+  activeColor: PlayerColor;
   castling: {
     white: {
       kingSide: boolean;
@@ -29,4 +36,19 @@ type ChessGame = {
   fullMoveNumber: number;
 };
 
-export type { Orientation, ChessGame, GameType, GameState };
+type ChessGameInfo = {
+  game: ChessGame;
+  playerColor: PlayerColor;
+  boardMarkers: ArrayOf64<SquareMarkerType>;
+  selectedSquare?: number;
+};
+
+export type {
+  Orientation,
+  PlayerColor,
+  ChessGame,
+  ChessGameInfo,
+  GameState,
+  SquareMarkerType,
+  ChessPieceType,
+};

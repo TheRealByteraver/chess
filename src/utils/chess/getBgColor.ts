@@ -1,9 +1,9 @@
-const getBgColor = (squareNr: number) => {
-  const white = 'bg-[#ffcf9f]';
-  const black = 'bg-[#d28c45]';
+import { PlayerColor } from '@/src/types/chess';
+
+const getBgColor = (squareNr: number): PlayerColor => {
   const rowNr = squareNr >> 3;
   const colNr = squareNr & 7;
-  return ((rowNr + colNr) & 1) === 1 ? black : white;
+  return ((rowNr + colNr) & 1) === 1 ? 'black' : 'white';
 };
 
 export default getBgColor;
