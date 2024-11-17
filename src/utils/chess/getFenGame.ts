@@ -1,7 +1,7 @@
 // FEN spec: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation#cite_note-pgn_spec-1
 // FEN start pos: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 
-import { ChessGame, ChessPieceType } from '@/src/types/chess';
+import { ChessBoardType, ChessGame } from '@/src/types/chess';
 import {
   BLACKBISHOP,
   BLACKKING,
@@ -73,7 +73,7 @@ const getFenGame = (fen: string): ChessGame => {
   const fenRows = fenSections[BOARDSECTION].split('/') ?? [];
   // if (fenRows.length !== 8) return undefined;
 
-  const board = Array(64).fill(EMPTY) as ArrayOf64<ChessPieceType>;
+  const board = Array(64).fill(EMPTY) as ChessBoardType;
 
   fenRows.forEach((fenRow, rowIndex) => {
     let columnIndex = 0;

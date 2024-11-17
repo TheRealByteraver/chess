@@ -17,9 +17,12 @@ type GameState =
   | 'stalemate'
   | 'draw';
 
+type ChessBoardType = ArrayOf64<ChessPieceType>;
+type BoardMarkerType = ArrayOf64<SquareMarkerType>;
+
 // attention: square 0 is A8, square 63 is H1
 type ChessGame = {
-  board: ArrayOf64<ChessPieceType>;
+  board: ChessBoardType;
   activeColor: PlayerColor;
   castling: {
     white: {
@@ -39,16 +42,24 @@ type ChessGame = {
 type ChessGameInfo = {
   game: ChessGame;
   playerColor: PlayerColor;
-  boardMarkers: ArrayOf64<SquareMarkerType>;
+  boardMarkers: BoardMarkerType;
   selectedSquare?: number;
+};
+
+type MoveType = {
+  square: number;
+  target: number;
 };
 
 export type {
   Orientation,
   PlayerColor,
+  ChessBoardType,
+  BoardMarkerType,
   ChessGame,
   ChessGameInfo,
   GameState,
   SquareMarkerType,
   ChessPieceType,
+  MoveType,
 };

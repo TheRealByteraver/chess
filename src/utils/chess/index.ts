@@ -1,6 +1,9 @@
 import getBgColor from './getBgColor';
 import getFenGame from './getFenGame';
-import getAvailableMoves from './getAvailableMoves';
+import {
+  getAllAvailableMoves,
+  getPieceAvailableMoves,
+} from './getAllAvailableMoves';
 import getNewGame from './getNewGame';
 import getPieceColor from './getPieceColor';
 import getIsValidSelection from './getIsValidSelection';
@@ -9,7 +12,8 @@ import getPieceXY from './getPieceXY';
 export {
   getBgColor,
   getFenGame,
-  getAvailableMoves,
+  getPieceAvailableMoves,
+  getAllAvailableMoves,
   getNewGame,
   getPieceColor,
   getIsValidSelection,

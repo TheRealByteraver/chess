@@ -1,23 +1,23 @@
 'use client';
 
 import {
+  BoardMarkerType,
+  ChessBoardType,
   ChessGameInfo,
-  ChessPieceType,
   GameState,
-  SquareMarkerType,
 } from '@/src/types/chess';
-import { ArrayOf64 } from '@/src/types/generic';
 import { Button, Container, Header1 } from '@/src/ui/atoms';
 import { ChessBoard } from '@/src/ui/molecules';
 import {
-  getAvailableMoves,
+  getAllAvailableMoves,
   getIsValidSelection,
   getNewGame,
-  getPieceColor,
 } from '@/src/utils/chess';
 import {
   BOARDDEFAULT,
   EMPTY,
+  LASTMOVEEND,
+  LASTMOVESTART,
   POSSIBLEMOVE,
   SELECTEDPIECE,
 } from '@/src/utils/constants';
@@ -33,21 +33,9 @@ const Chess = (): JSX.Element => {
   useEffect(() => {
     if (gameState === 'thinking') {
       // make bot move
-      const allMoves: { square: number; target: number }[] = [];
-
-      for (let square = 0; square < 64; square++) {
-        if (
-          getPieceColor(gameInfo.game.board[square]) !==
-          gameInfo.game.activeColor
-        )
-          continue;
-        const moves = getAvailableMoves(gameInfo.game, square);
-        if (moves.length === 0) continue;
-        moves.forEach((target) => allMoves.push({ square, target }));
-      }
+      const allMoves = getAllAvailableMoves(gameInfo.game);
 
       if (allMoves.length === 0) {
-        console.log('checkmate');
         setGameState('checkmate');
         return;
       }
@@ -55,10 +43,10 @@ const Chess = (): JSX.Element => {
       const move = allMoves[Math.floor(Math.random() * allMoves.length)];
 
       setGameInfo((prev) => {
-        const newBoardMarkers = Array(64).fill(
-          BOARDDEFAULT
-        ) as ArrayOf64<SquareMarkerType>;
-        const newBoard: ArrayOf64<ChessPieceType> = [...prev.game.board];
+        const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
+        newBoardMarkers[move.square] = LASTMOVESTART;
+        newBoardMarkers[move.target] = LASTMOVEEND;
+        const newBoard: ChessBoardType = [...prev.game.board];
         newBoard[move.target] = newBoard[move.square];
         newBoard[move.square] = EMPTY;
         return {
@@ -72,8 +60,6 @@ const Chess = (): JSX.Element => {
           boardMarkers: newBoardMarkers,
         };
       });
-
-      console.log('nr of moves:', allMoves.length);
 
       setGameState('waitingForUser');
     }
@@ -91,7 +77,6 @@ const Chess = (): JSX.Element => {
   const playerMoveHandler = (square: number) => {
     if (gameState !== 'waitingForUser') return;
     if (gameInfo.selectedSquare === undefined) {
-      console.log('no selected square');
       const isValidSelection = getIsValidSelection(
         gameInfo.game.board,
         square,
@@ -100,12 +85,14 @@ const Chess = (): JSX.Element => {
       // player clicked an empty square, opponent's piece, or piece that can't move
       if (!isValidSelection) return;
 
-      const moves = getAvailableMoves(gameInfo.game, square);
+      const allMoves = getAllAvailableMoves(gameInfo.game);
+      const moves = allMoves
+        .filter((move) => move.square === square)
+        .map((move) => move.target);
+
       if (moves.length > 0) {
         setGameInfo((prev) => {
-          const newBoardMarkers: ArrayOf64<SquareMarkerType> = [
-            ...prev.boardMarkers,
-          ];
+          const newBoardMarkers: BoardMarkerType = [...prev.boardMarkers];
           newBoardMarkers[square] = SELECTEDPIECE;
           moves.forEach((move) => (newBoardMarkers[move] = POSSIBLEMOVE));
           return {
@@ -116,17 +103,19 @@ const Chess = (): JSX.Element => {
         });
       }
     } else {
-      const moves = getAvailableMoves(gameInfo.game, gameInfo.selectedSquare);
-      console.log('moves:', moves);
-      console.log('valid:', moves.includes(square));
+      const allMoves = getAllAvailableMoves(gameInfo.game);
+      const moves = allMoves
+        .filter((move) => move.square === gameInfo.selectedSquare)
+        .map((move) => move.target);
+
       if (moves.includes(square)) {
         // player made a valid move
         const botColor = gameInfo.playerColor === 'white' ? 'black' : 'white';
         setGameInfo((prev) => {
           const newBoardMarkers = Array(64).fill(
             BOARDDEFAULT
-          ) as ArrayOf64<SquareMarkerType>;
-          const newBoard: ArrayOf64<ChessPieceType> = [...prev.game.board];
+          ) as BoardMarkerType;
+          const newBoard: ChessBoardType = [...prev.game.board];
           newBoard[square] = newBoard[gameInfo.selectedSquare as number];
           newBoard[gameInfo.selectedSquare as number] = EMPTY;
           return {
@@ -146,7 +135,7 @@ const Chess = (): JSX.Element => {
         setGameInfo((prev) => {
           const newBoardMarkers = Array(64).fill(
             BOARDDEFAULT
-          ) as ArrayOf64<SquareMarkerType>;
+          ) as BoardMarkerType;
           return {
             ...prev,
             selectedSquare: undefined,

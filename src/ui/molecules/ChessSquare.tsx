@@ -3,6 +3,8 @@ import Image from 'next/image';
 import {
   BOARDDEFAULT,
   EMPTY,
+  LASTMOVEEND,
+  LASTMOVESTART,
   POSSIBLEMOVE,
   SELECTEDPIECE,
 } from '@/src/utils/constants';
@@ -37,6 +39,11 @@ const ChessSquare = (props: Props): JSX.Element => {
       if (squareColor === 'white') return 'bg-[#c8d496]';
       else return 'bg-[#a9a556]';
     }
+    if (marker === LASTMOVESTART || marker === LASTMOVEEND) {
+      if (squareColor === 'white') return 'bg-[#fba188]';
+      else return 'bg-[#e67e5b]';
+    }
+
     if (squareColor === 'white') return 'bg-[#ffcf9f]';
     else return 'bg-[#d28c45]';
   };

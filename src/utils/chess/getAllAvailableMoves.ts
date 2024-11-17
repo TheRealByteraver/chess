@@ -1,6 +1,7 @@
-import { ChessGame } from '@/src/types/chess';
+import { ChessBoardType, ChessGame, MoveType } from '@/src/types/chess';
 import {
   BISHOP,
+  BLACKKING,
   EMPTY,
   KING,
   KNIGHT,
@@ -8,11 +9,49 @@ import {
   PIECEMASK,
   QUEEN,
   ROOK,
+  WHITEKING,
 } from '../constants';
 import getPieceColor from './getPieceColor';
 import getPieceXY from './getPieceXY';
 
-const getAvailableMoves = (game: ChessGame, square: number): number[] => {
+const isInCheck = (game: ChessGame, move: MoveType): boolean => {
+  const testBoard: ChessBoardType = [...game.board];
+  testBoard[move.target] = testBoard[move.square];
+  testBoard[move.square] = EMPTY;
+  const testGame: ChessGame = {
+    ...game,
+    board: testBoard,
+    activeColor: game.activeColor === 'white' ? 'black' : 'white',
+  };
+  const testKing = game.activeColor === 'white' ? WHITEKING : BLACKKING;
+
+  for (let square = 0; square < 64; square++) {
+    if (getPieceColor(testBoard[square]) !== testGame.activeColor) continue;
+
+    const moves = getPieceAvailableMoves(testGame, square);
+    for (const move of moves) if (testBoard[move] === testKing) return true;
+  }
+
+  return false;
+};
+
+const getAllAvailableMoves = (game: ChessGame): MoveType[] => {
+  const allMoves: MoveType[] = [];
+
+  console.log('game.activeColor:', game.activeColor);
+  for (let square = 0; square < 64; square++) {
+    if (getPieceColor(game.board[square]) !== game.activeColor) continue;
+    const moves = getPieceAvailableMoves(game, square);
+    if (moves.length > 0)
+      moves.forEach((target) => allMoves.push({ square, target }));
+  }
+
+  console.log('allMoves:', allMoves);
+  const legalMoves = allMoves.filter((move) => !isInCheck(game, move));
+  return legalMoves;
+};
+
+const getPieceAvailableMoves = (game: ChessGame, square: number): number[] => {
   // PROPS
   const { board, enPassant } = game;
 
@@ -144,41 +183,18 @@ const getAvailableMoves = (game: ChessGame, square: number): number[] => {
           if (board[square + 8] === EMPTY) moves.push(square + 8);
           if (
             x > 0 &&
-            (getPieceColor(board[square + 7]) === 'black' ||
+            (getPieceColor(board[square + 7]) === 'white' ||
               square + 7 === enPassant)
           )
             moves.push(square + 7);
           if (
             x < 7 &&
-            (getPieceColor(board[square + 9]) === 'black' ||
+            (getPieceColor(board[square + 9]) === 'white' ||
               square + 9 === enPassant)
           )
             moves.push(square + 9);
         }
       }
-      // const direction = pieceColor === 'white' ? -1 : 1;
-      // const startRow = pieceColor === 'white' ? 6 : 1;
-      // const isStartRow = y === startRow;
-      // const forward = y + direction;
-      // const forwardSquare = forward * 8 + x;
-      // const forward2 = forward + direction;
-      // const forward2Square = forward2 * 8 + x;
-      // const left = x - 1;
-      // const leftSquare = forward * 8 + left;
-      // const right = x + 1;
-      // const rightSquare = forward * 8 + right;
-      // const leftEnPassant = enPassant === leftSquare;
-      // const rightEnPassant = enPassant === rightSquare;
-
-      // if (board[forwardSquare] === EMPTY) moves.push(forwardSquare);
-      // if (isStartRow && board[forward2Square] === EMPTY)
-      //   moves.push(forward2Square);
-      // if (left >= 0 && getPieceColor(board[leftSquare]) === opponentColor)
-      //   moves.push(leftSquare);
-      // if (right < 8 && getPieceColor(board[rightSquare]) === opponentColor)
-      //   moves.push(rightSquare);
-      // if (leftEnPassant) moves.push(leftSquare);
-      // if (rightEnPassant) moves.push(rightSquare);
       break;
     case ROOK:
       const rookMoves = getRookMoves();
@@ -240,4 +256,4 @@ const getAvailableMoves = (game: ChessGame, square: number): number[] => {
   return moves;
 };
 
-export default getAvailableMoves;
+export { getAllAvailableMoves, getPieceAvailableMoves, isInCheck };
