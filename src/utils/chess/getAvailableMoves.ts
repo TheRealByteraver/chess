@@ -214,6 +214,7 @@ const getAvailableMoves = (game: ChessGame, square: number): number[] => {
       moves.push(...straightMoves, ...diagonalMoves);
       break;
     case KING:
+      // todo: castling
       const kingPositions = [
         [x - 1, y - 1],
         [x, y - 1],

@@ -24,8 +24,8 @@ const chessMiddlegames: string[] = [
   'rnbq1rk1/pp2ppbp/3p1np1/8/2PNP3/2N1BP2/PP3P1P/R2Q1RK1 b - - 0 9', // Another middlegame with an emphasis on central control.
 ];
 
-// const FENSTART = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-const FENSTART = chessMiddlegames[6];
+const FENSTART = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+// const FENSTART = chessMiddlegames[6];
 
 const EMPTY = 0;
 const PAWN = 1;
