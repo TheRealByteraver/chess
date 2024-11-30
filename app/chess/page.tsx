@@ -3,7 +3,14 @@
 import { BoardMarkerType, ChessGameInfo, GameState } from '@/src/types/chess';
 import { Button, Container, Header1 } from '@/src/ui/atoms';
 import { ChessBoard } from '@/src/ui/molecules';
-import { getAllAvailableMoves, getIsValidSelection, getNewGame, makeMove } from '@/src/utils/chess';
+import {
+  getAllAvailableMoves,
+  getIsValidSelection,
+  getNewGame,
+  getNrOfPieces,
+  isInCheck,
+  makeMove,
+} from '@/src/utils/chess';
 import { BOARDDEFAULT, POSSIBLEMOVE, SELECTEDPIECE } from '@/src/utils/constants';
 import { useEffect, useState } from 'react';
 
@@ -13,22 +20,31 @@ const Chess = (): JSX.Element => {
   const [gameInfo, setGameInfo] = useState<ChessGameInfo>(getNewGame());
 
   // EFFECTS
+  // make bot move
   useEffect(() => {
     if (gameState !== 'thinking') return;
-    // make bot move
     const allMoves = getAllAvailableMoves(gameInfo.game);
-
-    if (allMoves.length === 0) {
-      setGameState('checkmate'); // note: could be draw as well
-      return;
+    if (allMoves.length > 0) {
+      const move = allMoves[Math.floor(Math.random() * allMoves.length)];
+      const newGameInfo = makeMove(gameInfo, move);
+      setGameInfo(newGameInfo);
+      setGameState('waitingForUser');
     }
+  }, [gameState, gameInfo, gameInfo.game]);
 
-    const move = allMoves[Math.floor(Math.random() * allMoves.length)];
-    const newGameInfo = makeMove(gameInfo, move);
-    setGameInfo(newGameInfo);
+  // if there are only two kings left, it's a draw
+  useEffect(() => {
+    if (getNrOfPieces(gameInfo.game.board) === 2) setGameState('draw');
+  }, [gameInfo.game.board]);
 
-    setGameState('waitingForUser');
-  }, [gameState]);
+  // check for checkmate or stalemate
+  useEffect(() => {
+    const allMoves = getAllAvailableMoves(gameInfo.game);
+    if (allMoves.length === 0) {
+      if (isInCheck(gameInfo.game, { square: 0, target: 0 })) setGameState('checkmate');
+      else setGameState('stalemate');
+    }
+  }, [gameInfo.game]);
 
   // METHODS
   const startGameHandler = () => {

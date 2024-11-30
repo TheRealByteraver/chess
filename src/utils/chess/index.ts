@@ -13,6 +13,7 @@ import getPieceXY from './getPieceXY';
 import getRookMoves from './getRookMoves';
 import isInCheck from './isInCheck';
 import makeMove from './makeMove';
+import getNrOfPieces from './getNrOfPieces';
 
 export {
   getAllAvailableMoves,
@@ -30,4 +31,5 @@ export {
   getRookMoves,
   isInCheck,
   makeMove,
+  getNrOfPieces,
 };
