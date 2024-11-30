@@ -1,33 +1,65 @@
-type Orientation = "whiteOnBottom" | "blackOnBottom";
+import { PIECES, SQUAREMARKERS } from '../utils/constants';
+import { ArrayOf64 } from './generic';
 
-type ChessPiece =
-  | "P"
-  | "N"
-  | "B"
-  | "R"
-  | "Q"
-  | "K"
-  | "p"
-  | "n"
-  | "b"
-  | "r"
-  | "q"
-  | "k";
+type ChessPieceType = (typeof PIECES)[number];
 
-type ChessPieceName =
-  | "blackPawn"
-  | "blackKnight"
-  | "blackBishop"
-  | "blackRook"
-  | "blackQueen"
-  | "blackKing"
-  | "whitePawn"
-  | "whiteKnight"
-  | "whiteBishop"
-  | "whiteRook"
-  | "whiteQueen"
-  | "whiteKing";
+type SquareMarkerType = (typeof SQUAREMARKERS)[number];
 
-type Fen = Record<ChessPiece, ChessPieceName>;
+type Orientation = 'whiteOnBottom' | 'blackOnBottom';
 
-export type { ChessPiece, ChessPieceName, Fen, Orientation };
+type PlayerColor = 'white' | 'black';
+
+type GameState =
+  | 'begin'
+  | 'waitingForUser'
+  | 'thinking'
+  | 'checkmate'
+  | 'stalemate'
+  | 'draw';
+
+type ChessBoardType = ArrayOf64<ChessPieceType>;
+type BoardMarkerType = ArrayOf64<SquareMarkerType>;
+
+// attention: square 0 is A8, square 63 is H1
+type ChessGame = {
+  board: ChessBoardType;
+  activeColor: PlayerColor;
+  castling: {
+    white: {
+      kingSide: boolean;
+      queenSide: boolean;
+    };
+    black: {
+      kingSide: boolean;
+      queenSide: boolean;
+    };
+  };
+  enPassant: number | undefined; // 0-63
+  halfMoveClock: number;
+  fullMoveNumber: number;
+};
+
+type ChessGameInfo = {
+  game: ChessGame;
+  playerColor: PlayerColor;
+  boardMarkers: BoardMarkerType;
+  selectedSquare?: number;
+};
+
+type MoveType = {
+  square: number;
+  target: number;
+};
+
+export type {
+  Orientation,
+  PlayerColor,
+  ChessBoardType,
+  BoardMarkerType,
+  ChessGame,
+  ChessGameInfo,
+  GameState,
+  SquareMarkerType,
+  ChessPieceType,
+  MoveType,
+};

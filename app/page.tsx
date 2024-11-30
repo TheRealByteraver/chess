@@ -1,7 +1,30 @@
-export default function Home() {
+'use client';
+
+import { GameType } from '@/src/types/generic';
+import { Button, Container, Header1 } from '@/src/ui/atoms';
+import { ChessGameIcon } from '@/src/ui/molecules';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+const Home = (): JSX.Element => {
+  // ROUTER
+  const router = useRouter();
+
+  // STATE
+  const [gameType, setGameType] = useState<GameType>('none');
+
+  useEffect(() => {
+    if (gameType === 'chess') router.push('/chess');
+  }, [gameType, router]);
+
   return (
-    <div className="">
-      <h1>hello, home page</h1>
-    </div>
+    <Container hCenter vCenter>
+      <Header1 text="Play a game" />
+      <Button style="none" onClick={() => setGameType('chess')}>
+        <ChessGameIcon />
+      </Button>
+    </Container>
   );
-}
+};
+
+export default Home;

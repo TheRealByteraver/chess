@@ -1,66 +1,60 @@
-// FEN notation: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
-// const fenStart = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+import { ChessGame, ChessGameInfo, Orientation } from '@/src/types/chess';
+import Row from './ChessRow';
 
-import { ChessPiece, Orientation } from '@/src/types/chess';
-import ChessSquare from './ChessSquare';
-
-type Props = { fen: string; orientation: Orientation };
+type Props = {
+  interactive?: boolean;
+  board: ChessGame['board'];
+  boardMarkers?: ChessGameInfo['boardMarkers'];
+  orientation: Orientation;
+  size?: 'icon' | 'normal';
+  onClick?: (square: number) => void;
+};
 
 const ChessBoard = (props: Props): JSX.Element => {
   // PROPS
-  const { fen, orientation } = props;
+  const {
+    size = 'normal',
+    interactive = true,
+    board,
+    boardMarkers,
+    orientation,
+    onClick,
+  } = props;
 
   // METHODS
-  const getBgColor = (squareNr: number) => {
-    const rowNr = squareNr >> 3;
-    const colNr = squareNr & 1;
-    return ((rowNr + colNr) & 1) === 0 ? 'white' : 'black';
-  };
+  const Rows = ({
+    size,
+    mirrored,
+  }: {
+    size: 'icon' | 'normal';
+    mirrored: boolean;
+  }): JSX.Element => {
+    const rows: JSX.Element[] = [];
+    for (let rowIndex = 0; rowIndex < 8; rowIndex++)
+      rows.push(
+        <Row
+          interactive={interactive}
+          key={rowIndex}
+          size={size}
+          board={board}
+          boardMarkers={boardMarkers}
+          rowNumber={rowIndex}
+          mirrored={mirrored}
+          onClick={onClick}
+        />
+      );
 
-  const getBoardRow = (fenSection: string, rowNr: number): JSX.Element => {
-    let squareNr = rowNr * 8;
-    const row: JSX.Element[] = [];
-    for (let i = 0; i < fenSection.length; i++) {
-      const char = fenSection[i];
-      const skip = Number(char);
-      if (!isNaN(skip) && skip >= 1 && skip <= 8) {
-        for (let s = 0; s < skip; s++) {
-          row.push(
-            <ChessSquare key={squareNr} squareColor={getBgColor(squareNr)} />
-          );
-          squareNr++;
-        }
-      } else {
-        row.push(
-          <ChessSquare
-            key={squareNr}
-            piece={char as ChessPiece}
-            squareColor={getBgColor(squareNr)}
-          />
-        );
-        squareNr++;
-      }
-    }
-    return <>{...row}</>;
+    return (
+      <div className={`flex ${mirrored ? 'flex-col-reverse' : 'flex-col'}`}>
+        {...rows}
+      </div>
+    );
   };
 
   // VARS
-  const sections = fen.split(' ');
-  const rows = sections[0]?.split('/') ?? [];
   const mirrored = orientation === 'blackOnBottom';
 
-  return (
-    <div className={`flex ${mirrored ? 'flex-col-reverse' : 'flex-col'}`}>
-      {rows.map((row, index) => (
-        <div
-          key={index * 8}
-          className={`flex ${mirrored ? 'flex-row-reverse' : 'flex-row'}`}
-        >
-          {getBoardRow(row, index)}
-        </div>
-      ))}
-    </div>
-  );
+  return <Rows size={size} mirrored={mirrored} />;
 };
 
 export default ChessBoard;
