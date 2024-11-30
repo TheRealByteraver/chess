@@ -12,6 +12,7 @@ import getPieceColor from './getPieceColor';
 import getPieceXY from './getPieceXY';
 import getRookMoves from './getRookMoves';
 import isInCheck from './isInCheck';
+import makeMove from './makeMove';
 
 export {
   getAllAvailableMoves,
@@ -28,4 +29,5 @@ export {
   getPieceXY,
   getRookMoves,
   isInCheck,
+  makeMove,
 };

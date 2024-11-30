@@ -6,7 +6,8 @@ import getPieceAvailableMoves from './getPieceAvailableMoves';
 const isInCheck = (game: ChessGame, move: MoveType): boolean => {
   const testBoard: ChessBoardType = [...game.board];
   testBoard[move.target] = testBoard[move.square];
-  testBoard[move.square] = EMPTY;
+  // The check below is necessary for castling moves
+  if (move.target !== move.square) testBoard[move.square] = EMPTY;
   const testGame: ChessGame = {
     ...game,
     board: testBoard,

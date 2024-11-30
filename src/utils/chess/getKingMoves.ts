@@ -32,15 +32,16 @@ const getKingMoves = (game: ChessGame, square: number): number[] => {
   const moves = kingPositions.map(([x, y]) => (y << 3) + x);
 
   // castling moves
-  // const castlingOptions = game.castling[pieceColor];
-  // if (castlingOptions.kingSide) {
-  //   // check if the squares between the king and rook are empty
-  //   const kingSideEmpty = board[square + 1] === EMPTY && board[square + 2] === EMPTY;
-  //   if (kingSideEmpty) moves.push((y << 3) + 6);
-  // }
-
-  // WIP
-
+  const castlingOptions = game.castling[pieceColor];
+  if (castlingOptions.kingSide) {
+    const kingSideEmpty = board[square + 1] === EMPTY && board[square + 2] === EMPTY;
+    if (kingSideEmpty) moves.push((y << 3) + x + 2);
+  }
+  if (castlingOptions.queenSide) {
+    const queenSideEmpty =
+      board[square - 1] === EMPTY && board[square - 2] === EMPTY && board[square - 3] === EMPTY;
+    if (queenSideEmpty) moves.push((y << 3) + x - 2);
+  }
   return moves;
 };
 
