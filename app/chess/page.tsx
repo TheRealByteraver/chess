@@ -1,17 +1,17 @@
 'use client';
 
-import { BoardMarkerType, ChessGameInfo, GameState } from '@/src/types/chess';
+import { ChessGameInfo, GameState } from '@/src/types/chess';
 import { Button, Container, Header1 } from '@/src/ui/atoms';
 import { ChessBoard } from '@/src/ui/molecules';
 import {
   getAllAvailableMoves,
-  getIsValidSelection,
   getNewGame,
   getNrOfPieces,
   isInCheck,
   makeMove,
 } from '@/src/utils/chess';
-import { BOARDDEFAULT, POSSIBLEMOVE, SELECTEDPIECE } from '@/src/utils/constants';
+
+import { getUpdatedGameOnPlayerAction } from '@/src/utils/playLogic';
 import { useEffect, useState } from 'react';
 
 const Chess = (): JSX.Element => {
@@ -53,57 +53,14 @@ const Chess = (): JSX.Element => {
     setGameState(newGame.playerColor === newGame.game.activeColor ? 'waitingForUser' : 'thinking');
   };
 
-  const playerMoveHandler = (square: number) => {
+  const playerClickHandler = (square: number) => {
     if (gameState !== 'waitingForUser') return;
-    if (gameInfo.selectedSquare === undefined) {
-      const isValidSelection = getIsValidSelection(
-        gameInfo.game.board,
-        square,
-        gameInfo.playerColor,
-      );
-      // player clicked an empty square, opponent's piece, or piece that can't move
-      if (!isValidSelection) return;
+    const newGameInfo = getUpdatedGameOnPlayerAction(gameInfo, square);
+    // switch game state if the player made a move
+    if (newGameInfo.game.activeColor !== gameInfo.game.activeColor) setGameState('thinking');
 
-      // find the moves of the selected piece and keep potential target squares
-      const allMoves = getAllAvailableMoves(gameInfo.game);
-      const moves = allMoves.filter((move) => move.square === square).map((move) => move.target);
-
-      // mark the square as selected and show the possible moves
-      if (moves.length > 0) {
-        setGameInfo((prev) => {
-          const newBoardMarkers: BoardMarkerType = [...prev.boardMarkers];
-          newBoardMarkers[square] = SELECTEDPIECE;
-          moves.forEach((move) => (newBoardMarkers[move] = POSSIBLEMOVE));
-          return {
-            ...prev,
-            selectedSquare: square,
-            boardMarkers: newBoardMarkers,
-          };
-        });
-      }
-    } else {
-      const allMoves = getAllAvailableMoves(gameInfo.game);
-      const moves = allMoves
-        .filter((move) => move.square === gameInfo.selectedSquare)
-        .map((move) => move.target);
-
-      if (moves.includes(square)) {
-        // player made a valid move
-        const newGameInfo = makeMove(gameInfo, { square: gameInfo.selectedSquare, target: square });
-        setGameInfo(newGameInfo);
-        setGameState('thinking');
-      } else {
-        // undo selection
-        setGameInfo((prev) => {
-          const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
-          return {
-            ...prev,
-            selectedSquare: undefined,
-            boardMarkers: newBoardMarkers,
-          };
-        });
-      }
-    }
+    // update the board markers
+    setGameInfo(newGameInfo);
   };
 
   // VARS
@@ -126,7 +83,7 @@ const Chess = (): JSX.Element => {
           board={gameInfo.game.board}
           boardMarkers={gameInfo.boardMarkers}
           orientation={orientation}
-          onClick={playerMoveHandler}
+          onClick={playerClickHandler}
         />
       </div>
     </Container>
