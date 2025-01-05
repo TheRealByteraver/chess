@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 
 import { ChessGameInfo, GameState, PromotionPiece } from 'src/types/chess';
-import { Button, Container, Header1, Modal } from 'src/ui/atoms';
+import { Button, Container, Header1 } from 'src/ui/atoms';
 import {
   BoardMarkers,
   ChessBoard,
   ChessInteractiveLayer,
   ChessPieces,
-  ChessSquare,
+  PromotionModal,
 } from 'src/ui/molecules';
 import {
   getAllAvailableMoves,
@@ -21,7 +21,6 @@ import {
 } from 'src/utils/chess';
 import {
   BISHOP,
-  BLACK,
   BLACKBISHOP,
   BLACKKNIGHT,
   BLACKPAWN,
@@ -123,24 +122,14 @@ const Chess = (): JSX.Element => {
 
   // VARS
   const orientation = gameInfo?.playerColor === 'white' ? 'whiteOnBottom' : 'blackOnBottom';
-  const colorMask = gameInfo?.game.activeColor === 'white' ? 0 : BLACK;
-  const promotionPieces: PromotionPiece[] = [QUEEN, ROOK, BISHOP, KNIGHT].map(
-    (piece) => piece | colorMask,
-  );
 
   return (
     <Container hCenter vCenter>
-      <Modal isOpen={isModalOpen}>
-        <div className="flex flex-col gap-4">
-          {promotionPieces.map((piece) => (
-            <ChessSquare
-              key={piece}
-              piece={piece}
-              onClick={() => promotionDialogClickHandler(piece)}
-            />
-          ))}
-        </div>
-      </Modal>
+      <PromotionModal
+        isOpen={isModalOpen}
+        activeColor={gameInfo?.game.activeColor}
+        promotionDialogClickHandler={promotionDialogClickHandler}
+      />
       <Header1 text="Welcome to the chess bot!" />
       {['begin', 'checkmate', 'stalemate', 'draw'].includes(gameState) && (
         <Button className="mb-6" onClick={startGameHandler}>
