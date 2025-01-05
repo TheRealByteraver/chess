@@ -1,60 +1,20 @@
 import Image from 'next/image';
 
 import SVGPieces from 'src/media/chessPieces/SVGPieces';
-import { PlayerColor, SquareMarkerType } from 'src/types/chess';
-import {
-  BOARDDEFAULT,
-  EMPTY,
-  LASTMOVEEND,
-  LASTMOVEMASK,
-  LASTMOVESTART,
-  POSSIBLEMOVE,
-  SELECTEDPIECE,
-} from 'src/utils/constants';
-import getClassName from 'src/utils/general/classNames';
+import { EMPTY } from 'src/utils/constants';
 
 type Props = {
-  interactive: boolean;
   piece: number;
-  squareMarker?: SquareMarkerType;
-  squareColor: PlayerColor;
-  size: 'icon' | 'normal';
   onClick?: () => void;
 };
 
 const ChessSquare = (props: Props): JSX.Element => {
   // PROPS
-  const { interactive, size, piece, squareMarker = BOARDDEFAULT, squareColor, onClick } = props;
-
-  // METHODS
-  const getBackgroundColor = (marker: SquareMarkerType): string => {
-    if (marker === SELECTEDPIECE) return 'bg-yellow-500';
-    if (marker & POSSIBLEMOVE) {
-      if (squareColor === 'white') return 'bg-[#c8d496]';
-      else return 'bg-[#a9a556]';
-    }
-    if ([LASTMOVESTART, LASTMOVEEND].includes(marker & LASTMOVEMASK)) {
-      if (squareColor === 'white') return 'bg-[#fba188]';
-      else return 'bg-[#e67e5b]';
-    }
-
-    if (squareColor === 'white') return 'bg-[#ffcf9f]';
-    else return 'bg-[#d28c45]';
-  };
-
-  // VARS
-  const sizeCss = size === 'icon' ? 'w-8 h-8' : 'w-20 h-20';
-  const backgroundColor = getBackgroundColor(squareMarker);
-  const hoverCss = getClassName([
-    'absolute top-0 left-0',
-    sizeCss,
-    interactive ? 'hover:bg-yellow-400 hover:bg-opacity-80' : '',
-  ]);
-  const className = getClassName([sizeCss, backgroundColor, 'relative']);
+  const { piece, onClick } = props;
 
   return (
-    <div className={className} onClick={onClick}>
-      <div className={hoverCss}>
+    <div className="w-20 h-20 bg-[#d28c45] relative" onClick={onClick}>
+      <div className="absolute top-0 left-0 w-20 h-20 hover:bg-yellow-400 hover:bg-opacity-80">
         {piece !== EMPTY && <Image src={SVGPieces[piece].image} alt={SVGPieces[piece].name} fill />}
       </div>
     </div>

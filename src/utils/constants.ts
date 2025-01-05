@@ -14,14 +14,18 @@ const chessEndgames: string[] = [
 const chessMiddlegames: string[] = [
   'r1bq1rk1/ppp1bppp/2nppn2/8/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 w - - 0 10', // Balanced position from a classical game.
   'r2q1rk1/ppp2ppp/2n2n2/3b4/3P4/2NB1N2/PPPQ1PPP/R3R1K1 b - - 0 15', // Typical middlegame with tension in the center.
-  'r1b2rk1/pp3ppp/2n1pn2/2bq4/4P3/1NN1BP2/PPP1Q1PP/R4RK1 w - - 0 12', // Middlegame with knights and bishops controlling the center.
-  'r2q1rk1/1pp1bppp/2n1pn2/p7/2PP4/2NBPN2/PP2BPPP/R2Q1RK1 b - - 0 11', // Developing pieces and a pawn push in the center.
+  // Middlegame with knights and bishops controlling the center.
+  'r1b2rk1/pp3ppp/2n1pn2/2bq4/4P3/1NN1BP2/PPP1Q1PP/R4RK1 w - - 0 12',
+  // Developing pieces and a pawn push in the center.
+  'r2q1rk1/1pp1bppp/2n1pn2/p7/2PP4/2NBPN2/PP2BPPP/R2Q1RK1 b - - 0 11',
   'r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 9', // A flexible pawn structure and open lines.
   'r1bq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 10', // Another balanced middlegame position.
   'r1bqk2r/pppp1ppp/2n2n2/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 6', // A classic middlegame with center control.
   'r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 3', // A developing position with early e4 play.
-  'r2q1rk1/pp2ppbp/2npbnp1/4P3/2P5/2NBBN2/PP3PPP/R2Q1RK1 w - - 0 10', // A position with open diagonals and dynamic potential.
-  'rnbq1rk1/pp2ppbp/3p1np1/8/2PNP3/2N1BP2/PP3P1P/R2Q1RK1 b - - 0 9', // Another middlegame with an emphasis on central control.
+  // A position with open diagonals and dynamic potential.
+  'r2q1rk1/pp2ppbp/2npbnp1/4P3/2P5/2NBBN2/PP3PPP/R2Q1RK1 w - - 0 10',
+  // Another middlegame with an emphasis on central control.
+  'rnbq1rk1/pp2ppbp/3p1np1/8/2PNP3/2N1BP2/PP3P1P/R2Q1RK1 b - - 0 9',
 ];
 
 const FENSTART = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

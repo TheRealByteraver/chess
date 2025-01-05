@@ -4,7 +4,13 @@ import { useEffect, useState } from 'react';
 
 import { ChessGameInfo, GameState, PromotionPiece } from 'src/types/chess';
 import { Button, Container, Header1, Modal } from 'src/ui/atoms';
-import { ChessBoard, ChessSquare } from 'src/ui/molecules';
+import {
+  BoardMarkers,
+  ChessBoard,
+  ChessInteractiveLayer,
+  ChessPieces,
+  ChessSquare,
+} from 'src/ui/molecules';
 import {
   getAllAvailableMoves,
   getDefaultGame,
@@ -129,32 +135,26 @@ const Chess = (): JSX.Element => {
           {promotionPieces.map((piece) => (
             <ChessSquare
               key={piece}
-              interactive={true}
-              size="normal"
               piece={piece}
-              squareColor={'white'}
               onClick={() => promotionDialogClickHandler(piece)}
             />
           ))}
         </div>
       </Modal>
       <Header1 text="Welcome to the chess bot!" />
-      {gameState === 'begin' ? (
+      {['begin', 'checkmate', 'stalemate', 'draw'].includes(gameState) && (
         <Button className="mb-6" onClick={startGameHandler}>
           Start a new Game
         </Button>
-      ) : (
-        <p className="mb-6">Game state: {gameState}</p>
       )}
+      <p className="mb-6">Game state: {gameState}</p>
 
       <div className="inline-block border-8 border-[#d28c45]">
-        <ChessBoard
-          interactive={gameState === 'waitingForUser'}
-          board={gameInfo.game.board}
-          boardMarkers={gameInfo.boardMarkers}
-          orientation={orientation}
-          onClick={playerClickHandler}
-        />
+        <ChessBoard>
+          <BoardMarkers markers={gameInfo.boardMarkers} orientation={orientation} />
+          <ChessInteractiveLayer onClick={playerClickHandler} orientation={orientation} />
+          <ChessPieces board={gameInfo.game.board} orientation={orientation} />
+        </ChessBoard>
       </div>
     </Container>
   );
