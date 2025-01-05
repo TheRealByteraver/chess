@@ -1,9 +1,10 @@
-import { ChessGameInfo } from 'src/types/chess';
+import { BoardMarkerType, ChessGameInfo } from 'src/types/chess';
 
 import { getIsValidSelection, makeMove } from '../chess';
 import getBoardMarkersTargets from './getBoardMarkersTargets';
 import getEmptyBoardMarkersWithLastMove from './getEmptyBoardMarkersWithLastMove';
 import getIsValidMove from './getIsValidMove';
+import { BOARDDEFAULT } from '../constants';
 
 const getUpdatedGameOnPlayerAction = (gameInfo: ChessGameInfo, square: number): ChessGameInfo => {
   // The player selected a square, check if it has one of his pieces
@@ -39,9 +40,14 @@ const getUpdatedGameOnPlayerAction = (gameInfo: ChessGameInfo, square: number): 
   const isValidMove = getIsValidMove(gameInfo.game, playerMove);
   if (isValidMove) {
     const newGame = makeMove(gameInfo.game, playerMove);
+
+    // clear the board markers so they are clean whenever the player won the game
+    const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
     return {
       ...gameInfo,
       game: newGame,
+      boardMarkers: newBoardMarkers,
+      selectedSquare: undefined,
     };
   }
 
