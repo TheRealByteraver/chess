@@ -1,6 +1,6 @@
-import getBgColor from '@/src/utils/chess/getBgColor';
+import getBgColor from 'src/utils/chess/getBgColor';
 import ChessSquare from './ChessSquare';
-import { ChessGame, ChessGameInfo } from '@/src/types/chess';
+import { ChessGame, ChessGameInfo } from 'src/types/chess';
 
 type Props = {
   interactive: boolean;
@@ -14,15 +14,7 @@ type Props = {
 
 const Row = (props: Props): JSX.Element => {
   // PROPS
-  const {
-    interactive,
-    board,
-    boardMarkers,
-    size,
-    rowNumber,
-    mirrored,
-    onClick,
-  } = props;
+  const { interactive, board, boardMarkers, size, rowNumber, mirrored, onClick } = props;
 
   // VARS
   const squareNr = rowNumber * 8;
@@ -38,15 +30,11 @@ const Row = (props: Props): JSX.Element => {
         marker={boardMarkers ? boardMarkers[index] : undefined}
         squareColor={getBgColor(index)}
         onClick={onClick ? () => onClick(index) : undefined}
-      />
+      />,
     );
   }
 
-  return (
-    <div className={`flex ${mirrored ? 'flex-row-reverse' : 'flex-row'}`}>
-      {...squares}
-    </div>
-  );
+  return <div className={`flex ${mirrored ? 'flex-row-reverse' : 'flex-row'}`}>{...squares}</div>;
 };
 
 export default Row;

@@ -1,4 +1,4 @@
-import getClassName from '@/src/utils/general/classNames';
+import getClassName from 'src/utils/general/classNames';
 import { ReactNode } from 'react';
 
 type Props = {

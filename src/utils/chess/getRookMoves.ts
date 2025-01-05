@@ -1,4 +1,4 @@
-import { ChessGame } from '@/src/types/chess';
+import { ChessGame } from 'src/types/chess';
 import { EMPTY } from '../constants';
 import getPieceColor from './getPieceColor';
 import getPieceXY from './getPieceXY';

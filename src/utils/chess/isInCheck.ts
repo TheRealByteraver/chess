@@ -1,4 +1,4 @@
-import { ChessBoardType, ChessGame, MoveType } from '@/src/types/chess';
+import { ChessBoardType, ChessGame, MoveType } from 'src/types/chess';
 import { BLACKKING, EMPTY, WHITEKING } from '../constants';
 import getPieceColor from './getPieceColor';
 import getPieceAvailableMoves from './getPieceAvailableMoves';

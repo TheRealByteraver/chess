@@ -1,4 +1,4 @@
-import { BoardMarkerType, ChessGameInfo } from '@/src/types/chess';
+import { BoardMarkerType, ChessGameInfo } from 'src/types/chess';
 import getFenGame from './getFenGame';
 import { BOARDDEFAULT, FENSTART } from '../constants';
 

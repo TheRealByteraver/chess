@@ -1,4 +1,4 @@
-import { ChessGame } from '@/src/types/chess';
+import { ChessGame } from 'src/types/chess';
 import getPieceColor from './getPieceColor';
 import { BISHOP, KING, KNIGHT, PAWN, PIECEMASK, QUEEN, ROOK } from '../constants';
 import getPawnMoves from './getPawnMoves';

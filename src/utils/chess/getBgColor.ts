@@ -1,4 +1,4 @@
-import { PlayerColor } from '@/src/types/chess';
+import { PlayerColor } from 'src/types/chess';
 
 const getBgColor = (squareNr: number): PlayerColor => {
   const rowNr = squareNr >> 3;

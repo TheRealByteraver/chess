@@ -1,4 +1,4 @@
-import { ChessPieceType, PlayerColor } from '@/src/types/chess';
+import { ChessPieceType, PlayerColor } from 'src/types/chess';
 import { BLACK, EMPTY } from '../constants';
 
 const getPieceColor = (piece: ChessPieceType): PlayerColor | undefined => {

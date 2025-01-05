@@ -8,7 +8,9 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    // new
     "plugin:prettier/recommended",
+    //"standard-with-typescript",
     "next"
   ],
   "env": {
@@ -23,7 +25,7 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": "latest",
+    "ecmaVersion": "latest", // 12 or 2021
     "sourceType": "module"
   },
   "ignorePatterns": [
@@ -53,7 +55,7 @@
     "react-hooks/exhaustive-deps": "error",
     "max-len": [2, { "code": 120, "tabWidth": 4, "ignoreUrls": true }],
     "prettier/prettier": "error",
-    "@typescript-eslint/indent": ["error", 2],
+    // new
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
@@ -64,6 +66,7 @@
         "format": ["camelCase", "PascalCase", "UPPER_CASE", "snake_case"]
       }
     ],
+    // import manager
     "import/order": [
       "error",
       {
@@ -86,6 +89,7 @@
   },
   "overrides": [
     {
+      // enable the rule specifically for TypeScript files
       "files": ["*.ts", "*.tsx"],
       "rules": {
         "@typescript-eslint/explicit-function-return-type": ["error"]

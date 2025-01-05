@@ -27,7 +27,7 @@ import {
   WHITEPAWN,
   WHITEQUEEN,
   WHITEROOK,
-} from '@/src/utils/constants';
+} from 'src/utils/constants';
 
 // VARS
 const SVGPieces: Record<number, { image: StaticImport; name: string }> = {

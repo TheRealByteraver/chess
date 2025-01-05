@@ -1,4 +1,4 @@
-import { ChessGame, MoveType } from '@/src/types/chess';
+import { ChessGame, MoveType } from 'src/types/chess';
 
 import getPieceColor from './getPieceColor';
 import getPieceAvailableMoves from './getPieceAvailableMoves';

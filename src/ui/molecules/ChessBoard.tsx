@@ -1,4 +1,4 @@
-import { ChessGame, ChessGameInfo, Orientation } from '@/src/types/chess';
+import { ChessGame, ChessGameInfo, Orientation } from 'src/types/chess';
 import Row from './ChessRow';
 
 type Props = {
@@ -12,14 +12,7 @@ type Props = {
 
 const ChessBoard = (props: Props): JSX.Element => {
   // PROPS
-  const {
-    size = 'normal',
-    interactive = true,
-    board,
-    boardMarkers,
-    orientation,
-    onClick,
-  } = props;
+  const { size = 'normal', interactive = true, board, boardMarkers, orientation, onClick } = props;
 
   // METHODS
   const Rows = ({
@@ -41,14 +34,10 @@ const ChessBoard = (props: Props): JSX.Element => {
           rowNumber={rowIndex}
           mirrored={mirrored}
           onClick={onClick}
-        />
+        />,
       );
 
-    return (
-      <div className={`flex ${mirrored ? 'flex-col-reverse' : 'flex-col'}`}>
-        {...rows}
-      </div>
-    );
+    return <div className={`flex ${mirrored ? 'flex-col-reverse' : 'flex-col'}`}>{...rows}</div>;
   };
 
   // VARS

@@ -1,8 +1,8 @@
 'use client';
 
-import { GameType } from '@/src/types/generic';
-import { Button, Container, Header1 } from '@/src/ui/atoms';
-import { ChessGameIcon } from '@/src/ui/molecules';
+import { GameType } from 'src/types/generic';
+import { Button, Container, Header1 } from 'src/ui/atoms';
+import { ChessGameIcon } from 'src/ui/molecules';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 

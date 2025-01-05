@@ -1,4 +1,4 @@
-import { getFenGame } from '@/src/utils/chess';
+import { getFenGame } from 'src/utils/chess';
 import ChessBoard from './ChessBoard';
 import { useEffect, useState } from 'react';
 import ChessEmptyBoard from './ChessEmptyBoard';
@@ -27,8 +27,7 @@ const ChessGameIcon = (): JSX.Element => {
     'rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1', // King's Indian Defense (1. d4 Nf6 2. c4 g6)
   ];
 
-  const game =
-    index === null ? undefined : getFenGame(famousChessOpenings[index]);
+  const game = index === null ? undefined : getFenGame(famousChessOpenings[index]);
 
   return (
     <>

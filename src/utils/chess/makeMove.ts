@@ -1,4 +1,4 @@
-import { BoardMarkerType, ChessBoardType, ChessGameInfo, MoveType } from '@/src/types/chess';
+import { BoardMarkerType, ChessBoardType, ChessGameInfo, MoveType } from 'src/types/chess';
 import {
   BOARDDEFAULT,
   EMPTY,

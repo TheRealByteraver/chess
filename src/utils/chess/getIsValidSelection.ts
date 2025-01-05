@@ -1,10 +1,10 @@
-import { ChessGame, PlayerColor } from '@/src/types/chess';
+import { ChessGame, PlayerColor } from 'src/types/chess';
 import getPieceColor from './getPieceColor';
 
 const getIsValidSelection = (
   board: ChessGame['board'],
   square: number,
-  playerColor: PlayerColor
+  playerColor: PlayerColor,
 ): boolean => {
   const piece = board[square];
   const pieceColor = getPieceColor(piece);

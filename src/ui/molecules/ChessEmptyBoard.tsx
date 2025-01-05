@@ -1,6 +1,6 @@
 import ChessSquare from './ChessSquare';
-import { EMPTY } from '@/src/utils/constants';
-import { getBgColor } from '@/src/utils/chess';
+import { EMPTY } from 'src/utils/constants';
+import { getBgColor } from 'src/utils/chess';
 
 type Props = {
   size?: 'icon' | 'normal';
@@ -24,7 +24,7 @@ const ChessEmptyBoard = (props: Props): JSX.Element => {
             size={size}
             piece={EMPTY}
             squareColor={getBgColor(squareIndex)}
-          />
+          />,
         );
         squareIndex++;
       }

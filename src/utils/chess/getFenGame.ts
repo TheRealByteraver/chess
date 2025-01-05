@@ -1,7 +1,7 @@
 // FEN spec: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation#cite_note-pgn_spec-1
 // FEN start pos: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 
-import { ChessBoardType, ChessGame } from '@/src/types/chess';
+import { ChessBoardType, ChessGame } from 'src/types/chess';
 import {
   BLACKBISHOP,
   BLACKKING,
@@ -17,21 +17,8 @@ import {
   WHITEQUEEN,
   WHITEROOK,
 } from '../constants';
-import { ArrayOf64 } from '@/src/types/generic';
 
-type FenChessPiece =
-  | 'P'
-  | 'N'
-  | 'B'
-  | 'R'
-  | 'Q'
-  | 'K'
-  | 'p'
-  | 'n'
-  | 'b'
-  | 'r'
-  | 'q'
-  | 'k';
+type FenChessPiece = 'P' | 'N' | 'B' | 'R' | 'Q' | 'K' | 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 
 const getFenGame = (fen: string): ChessGame => {
   const fenMap: Record<FenChessPiece, number> = {
@@ -91,8 +78,7 @@ const getFenGame = (fen: string): ChessGame => {
     }
   });
 
-  const activeColor =
-    fenSections[ACTIVECOLORSECTION] === 'w' ? 'white' : 'black';
+  const activeColor = fenSections[ACTIVECOLORSECTION] === 'w' ? 'white' : 'black';
 
   const castlingInfo = fenSections[CASTLINGSECTION];
   const castling =

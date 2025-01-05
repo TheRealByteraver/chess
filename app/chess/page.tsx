@@ -1,10 +1,10 @@
 'use client';
 
-import { BoardMarkerType, ChessGameInfo, GameState } from '@/src/types/chess';
-import { Button, Container, Header1 } from '@/src/ui/atoms';
-import { ChessBoard } from '@/src/ui/molecules';
-import { getAllAvailableMoves, getIsValidSelection, getNewGame, makeMove } from '@/src/utils/chess';
-import { BOARDDEFAULT, POSSIBLEMOVE, SELECTEDPIECE } from '@/src/utils/constants';
+import { BoardMarkerType, ChessGameInfo, GameState } from 'src/types/chess';
+import { Button, Container, Header1 } from 'src/ui/atoms';
+import { ChessBoard } from 'src/ui/molecules';
+import { getAllAvailableMoves, getIsValidSelection, getNewGame, makeMove } from 'src/utils/chess';
+import { BOARDDEFAULT, POSSIBLEMOVE, SELECTEDPIECE } from 'src/utils/constants';
 import { useEffect, useState } from 'react';
 
 const Chess = (): JSX.Element => {
