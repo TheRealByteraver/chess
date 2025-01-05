@@ -4,6 +4,7 @@ import {
   BOARDDEFAULT,
   EMPTY,
   LASTMOVEEND,
+  LASTMOVEMASK,
   LASTMOVESTART,
   POSSIBLEMOVE,
   SELECTEDPIECE,
@@ -28,11 +29,11 @@ const ChessSquare = (props: Props): JSX.Element => {
   // METHODS
   const getBackgroundColor = (marker: SquareMarkerType): string => {
     if (marker === SELECTEDPIECE) return 'bg-yellow-500';
-    if (marker === POSSIBLEMOVE) {
+    if (marker & POSSIBLEMOVE) {
       if (squareColor === 'white') return 'bg-[#c8d496]';
       else return 'bg-[#a9a556]';
     }
-    if (marker === LASTMOVESTART || marker === LASTMOVEEND) {
+    if ([LASTMOVESTART, LASTMOVEEND].includes(marker & LASTMOVEMASK)) {
       if (squareColor === 'white') return 'bg-[#fba188]';
       else return 'bg-[#e67e5b]';
     }
