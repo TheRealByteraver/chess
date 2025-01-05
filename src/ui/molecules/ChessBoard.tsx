@@ -1,4 +1,5 @@
 import { ChessGame, ChessGameInfo, Orientation } from 'src/types/chess';
+
 import Row from './ChessRow';
 
 type Props = {

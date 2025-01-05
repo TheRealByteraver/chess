@@ -1,7 +1,7 @@
-import getEmptyBoardMarkers from './getEmptyBoardMarkers';
-import getIsValidMove from './getIsValidMove';
-import getEmptyBoardMarkersWithLastMove from './getEmptyBoardMarkersWithLastMove';
 import getBoardMarkersTargets from './getBoardMarkersTargets';
+import getEmptyBoardMarkers from './getEmptyBoardMarkers';
+import getEmptyBoardMarkersWithLastMove from './getEmptyBoardMarkersWithLastMove';
+import getIsValidMove from './getIsValidMove';
 import getUpdatedGameOnPlayerAction from './getUpdatedGameOnPlayerAction';
 
 export {
