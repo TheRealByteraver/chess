@@ -1,6 +1,8 @@
+import BoardMarkers from './BoardMarkers';
 import ChessBoard from './ChessBoard';
 import ChessGameIcon from './ChessGameIcon';
-import ChessRow from './ChessRow';
+import ChessInteractiveLayer from './ChessInteractiveLayer';
+import ChessPieces from './ChessPieces';
 import ChessSquare from './ChessSquare';
 
-export { ChessBoard, ChessRow, ChessSquare, ChessGameIcon };
+export { ChessBoard, ChessGameIcon, BoardMarkers, ChessPieces, ChessInteractiveLayer, ChessSquare };
