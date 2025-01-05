@@ -37,7 +37,13 @@ const getUpdatedGameOnPlayerAction = (gameInfo: ChessGameInfo, square: number): 
     target: square,
   };
   const isValidMove = getIsValidMove(gameInfo.game, playerMove);
-  if (isValidMove) return makeMove(gameInfo, playerMove);
+  if (isValidMove) {
+    const newGame = makeMove(gameInfo.game, playerMove);
+    return {
+      ...gameInfo,
+      game: newGame,
+    };
+  }
 
   // not a valid move, check if player selected another piece
   const isValidSelection = getIsValidSelection(gameInfo.game.board, square, gameInfo.playerColor);

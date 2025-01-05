@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { ChessGameInfo, GameState, PromotionPiece } from 'src/types/chess';
+import { BoardMarkerType, ChessGameInfo, GameState, PromotionPiece } from 'src/types/chess';
 import { Button, Container, Header1 } from 'src/ui/atoms';
 import {
   BoardMarkers,
@@ -19,6 +19,7 @@ import {
   isInCheck,
   makeMove,
 } from 'src/utils/chess';
+import getBotMove from 'src/utils/chess/getBotMove';
 import {
   BISHOP,
   BLACKBISHOP,
@@ -26,7 +27,10 @@ import {
   BLACKPAWN,
   BLACKQUEEN,
   BLACKROOK,
+  BOARDDEFAULT,
   KNIGHT,
+  LASTMOVEEND,
+  LASTMOVESTART,
   PAWN,
   QUEEN,
   ROOK,
@@ -44,24 +48,35 @@ const Chess = (): JSX.Element => {
   // make bot move
   useEffect(() => {
     if (gameState !== 'thinking') return;
-    const allMoves = getAllAvailableMoves(gameInfo.game);
-    if (allMoves.length > 0) {
-      const move = allMoves[Math.floor(Math.random() * allMoves.length)];
-      const newGameInfo = makeMove(gameInfo, move);
+    const botMove = getBotMove(gameInfo.game);
+    if (botMove) {
+      const newGame = makeMove(gameInfo.game, botMove);
+
+      // mark the move on the board if it was a move made by the bot
+      const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
+      if (gameInfo.playerColor !== gameInfo.game.activeColor) {
+        newBoardMarkers[botMove.square] = LASTMOVESTART;
+        newBoardMarkers[botMove.target] = LASTMOVEEND;
+      }
 
       // Pawn promotion logic
       const pawnCheck = gameInfo.game.activeColor === 'white' ? PAWN : BLACKPAWN;
-      if (newGameInfo.game.board[move.target] === pawnCheck) {
+      if (newGame.board[botMove.target] === pawnCheck) {
         const finalRow = gameInfo.game.activeColor === 'white' ? 0 : 7;
-        if (move.target >> 3 === finalRow) {
+        if (botMove.target >> 3 === finalRow) {
           const promotionPiece: PromotionPiece[] =
             gameInfo.game.activeColor === 'white'
               ? [QUEEN, ROOK, BISHOP, KNIGHT]
               : [BLACKQUEEN, BLACKROOK, BLACKBISHOP, BLACKKNIGHT];
-          newGameInfo.game.board[move.target] = promotionPiece[Math.floor(Math.random() * 4)];
+          newGame.board[botMove.target] = promotionPiece[Math.floor(Math.random() * 4)];
         }
       }
-      setGameInfo(newGameInfo);
+      setGameInfo({
+        ...gameInfo,
+        game: newGame,
+        boardMarkers: newBoardMarkers,
+        selectedSquare: undefined,
+      });
       setGameState('waitingForUser');
     }
   }, [gameInfo, gameState]);
