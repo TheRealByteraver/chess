@@ -5,22 +5,22 @@ type Props = {
   isOpen: boolean;
 };
 
-const Modal = (props: Props) => {
+const Modal = (props: Props): JSX.Element | null => {
   // PROPS
   const { isOpen, children } = props;
 
   // HOOKS
   const dialogRef = useRef<HTMLDialogElement>(null);
 
+  // METHODS
+  const showModal = (): void => dialogRef.current?.showModal();
+  const closeModal = (): void => dialogRef.current?.close();
+
   // EFFECTS
   useEffect(() => {
     if (isOpen) showModal();
     else closeModal();
   }, [isOpen]);
-
-  // METHODS
-  const showModal = () => dialogRef.current?.showModal();
-  const closeModal = () => dialogRef.current?.close();
 
   if (!dialogRef) return null;
 

@@ -1,13 +1,10 @@
 import { ChessGameInfo } from 'src/types/chess';
-import getFenGame from './getFenGame';
-import { FENSTART } from '../constants';
-import { getEmptyBoardMarkers } from '../playLogic';
+import getDefaultGame from './getDefaultGame';
 
 const getNewGame = (): ChessGameInfo => {
   return {
-    game: getFenGame(FENSTART),
+    ...getDefaultGame(),
     playerColor: Math.random() >= 0.5 ? 'white' : 'black',
-    boardMarkers: getEmptyBoardMarkers(),
   };
 };
 

@@ -1,5 +1,5 @@
-import { PIECES, PROMOTIONPIECES, SQUAREMARKERS } from '../utils/constants';
 import { ArrayOf64 } from './generic';
+import { PIECES, PROMOTIONPIECES, SQUAREMARKERS } from '../utils/constants';
 
 type ChessPieceType = (typeof PIECES)[number];
 

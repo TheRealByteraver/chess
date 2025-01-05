@@ -1,6 +1,7 @@
-import ChessSquare from './ChessSquare';
-import { EMPTY } from 'src/utils/constants';
 import { getBgColor } from 'src/utils/chess';
+import { EMPTY } from 'src/utils/constants';
+
+import ChessSquare from './ChessSquare';
 
 type Props = {
   size?: 'icon' | 'normal';

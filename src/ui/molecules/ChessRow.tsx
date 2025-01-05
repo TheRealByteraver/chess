@@ -1,6 +1,7 @@
-import getBgColor from 'src/utils/chess/getBgColor';
-import ChessSquare from './ChessSquare';
 import { ChessGame, ChessGameInfo } from 'src/types/chess';
+import getBgColor from 'src/utils/chess/getBgColor';
+
+import ChessSquare from './ChessSquare';
 
 type Props = {
   interactive: boolean;
@@ -27,9 +28,9 @@ const Row = (props: Props): JSX.Element => {
         interactive={interactive}
         size={size}
         piece={board[index]}
-        marker={boardMarkers ? boardMarkers[index] : undefined}
+        squareMarker={boardMarkers ? boardMarkers[index] : undefined}
         squareColor={getBgColor(index)}
-        onClick={onClick ? () => onClick(index) : undefined}
+        onClick={onClick ? (): void => onClick(index) : undefined}
       />,
     );
   }

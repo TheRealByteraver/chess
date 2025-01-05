@@ -4,7 +4,7 @@
     "plugin:react/recommended",
     "airbnb-typescript",
     "airbnb/hooks",
-    "prettier",
+    // "prettier",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
@@ -33,19 +33,9 @@
     "colors.js",
     "postcss.config.js",
     "next.config.js",
-    "_error.js",
-    "sentry.client.config.js",
-    "sentry.server.config.js"
+    "_error.js"
   ],
-  "plugins": [
-    "react",
-    "prettier",
-    "@typescript-eslint",
-    "import",
-    "jsx-a11y",
-    "react-hooks",
-    "no-loops"
-  ],
+  "plugins": ["react", "prettier", "@typescript-eslint", "import", "jsx-a11y", "react-hooks"],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
     "arrow-body-style": ["error", "as-needed"],

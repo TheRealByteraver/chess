@@ -1,10 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { ChessGameInfo, GameState, PromotionPiece } from 'src/types/chess';
 import { Button, Container, Header1, Modal } from 'src/ui/atoms';
 import { ChessBoard, ChessSquare } from 'src/ui/molecules';
 import {
   getAllAvailableMoves,
+  getDefaultGame,
   getNewGame,
   getNrOfPieces,
   isInCheck,
@@ -23,14 +26,12 @@ import {
   QUEEN,
   ROOK,
 } from 'src/utils/constants';
-
 import { getUpdatedGameOnPlayerAction } from 'src/utils/playLogic';
-import { useEffect, useState } from 'react';
 
 const Chess = (): JSX.Element => {
   // STATE
   const [gameState, setGameState] = useState<GameState>('begin');
-  const [gameInfo, setGameInfo] = useState<ChessGameInfo>(getNewGame());
+  const [gameInfo, setGameInfo] = useState<ChessGameInfo>(getDefaultGame());
   const [promotionSquare, setPromotionSquare] = useState<number | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -58,7 +59,7 @@ const Chess = (): JSX.Element => {
       setGameInfo(newGameInfo);
       setGameState('waitingForUser');
     }
-  }, [gameState, gameInfo, gameInfo.game]);
+  }, [gameInfo, gameState]);
 
   // if there are only two kings left, it's a draw
   useEffect(() => {
@@ -75,13 +76,13 @@ const Chess = (): JSX.Element => {
   }, [gameInfo.game]);
 
   // METHODS
-  const startGameHandler = () => {
+  const startGameHandler = (): void => {
     const newGame = getNewGame();
     setGameInfo(newGame);
     setGameState(newGame.playerColor === newGame.game.activeColor ? 'waitingForUser' : 'thinking');
   };
 
-  const playerClickHandler = (square: number) => {
+  const playerClickHandler = (square: number): void => {
     if (gameState !== 'waitingForUser') return;
     const newGameInfo = getUpdatedGameOnPlayerAction(gameInfo, square);
     // switch game state if the player made a move
@@ -102,7 +103,7 @@ const Chess = (): JSX.Element => {
     setGameInfo(newGameInfo);
   };
 
-  const handlePromotionDialogClick = (piece: PromotionPiece) => {
+  const promotionDialogClickHandler = (piece: PromotionPiece): void => {
     if (promotionSquare === undefined) {
       setIsModalOpen(false);
       return;
@@ -115,8 +116,8 @@ const Chess = (): JSX.Element => {
   };
 
   // VARS
-  const orientation = gameInfo.playerColor === 'white' ? 'whiteOnBottom' : 'blackOnBottom';
-  const colorMask = gameInfo.game.activeColor === 'white' ? 0 : BLACK;
+  const orientation = gameInfo?.playerColor === 'white' ? 'whiteOnBottom' : 'blackOnBottom';
+  const colorMask = gameInfo?.game.activeColor === 'white' ? 0 : BLACK;
   const promotionPieces: PromotionPiece[] = [QUEEN, ROOK, BISHOP, KNIGHT].map(
     (piece) => piece | colorMask,
   );
@@ -132,7 +133,7 @@ const Chess = (): JSX.Element => {
               size="normal"
               piece={piece}
               squareColor={'white'}
-              onClick={() => handlePromotionDialogClick(piece)}
+              onClick={() => promotionDialogClickHandler(piece)}
             />
           ))}
         </div>

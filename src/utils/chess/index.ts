@@ -14,6 +14,7 @@ import getRookMoves from './getRookMoves';
 import isInCheck from './isInCheck';
 import makeMove from './makeMove';
 import getNrOfPieces from './getNrOfPieces';
+import getDefaultGame from './getDefaultGame';
 
 export {
   getAllAvailableMoves,
@@ -32,4 +33,5 @@ export {
   isInCheck,
   makeMove,
   getNrOfPieces,
+  getDefaultGame,
 };
