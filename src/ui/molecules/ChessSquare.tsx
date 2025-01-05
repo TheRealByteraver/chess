@@ -4,6 +4,7 @@ import {
   BOARDDEFAULT,
   EMPTY,
   LASTMOVEEND,
+  LASTMOVEMASK,
   LASTMOVESTART,
   POSSIBLEMOVE,
   SELECTEDPIECE,
@@ -23,23 +24,16 @@ type Props = {
 
 const ChessSquare = (props: Props): JSX.Element => {
   // PROPS
-  const {
-    interactive,
-    size,
-    piece,
-    marker = BOARDDEFAULT,
-    squareColor,
-    onClick,
-  } = props;
+  const { interactive, size, piece, marker = BOARDDEFAULT, squareColor, onClick } = props;
 
   // METHODS
   const getBackgroundColor = (marker: SquareMarkerType): string => {
     if (marker === SELECTEDPIECE) return 'bg-yellow-500';
-    if (marker === POSSIBLEMOVE) {
+    if (marker & POSSIBLEMOVE) {
       if (squareColor === 'white') return 'bg-[#c8d496]';
       else return 'bg-[#a9a556]';
     }
-    if (marker === LASTMOVESTART || marker === LASTMOVEEND) {
+    if ([LASTMOVESTART, LASTMOVEEND].includes(marker & LASTMOVEMASK)) {
       if (squareColor === 'white') return 'bg-[#fba188]';
       else return 'bg-[#e67e5b]';
     }
@@ -61,13 +55,7 @@ const ChessSquare = (props: Props): JSX.Element => {
   return (
     <div className={className} onClick={onClick}>
       <div className={hoverCss}>
-        {piece !== EMPTY && (
-          <Image
-            src={SVGPieces[piece].image}
-            alt={SVGPieces[piece].name}
-            fill
-          />
-        )}
+        {piece !== EMPTY && <Image src={SVGPieces[piece].image} alt={SVGPieces[piece].name} fill />}
       </div>
     </div>
   );

@@ -1,21 +1,17 @@
-import { PIECES, SQUAREMARKERS } from '../utils/constants';
+import { PIECES, PROMOTIONPIECES, SQUAREMARKERS } from '../utils/constants';
 import { ArrayOf64 } from './generic';
 
 type ChessPieceType = (typeof PIECES)[number];
 
 type SquareMarkerType = (typeof SQUAREMARKERS)[number];
 
+type PromotionPiece = (typeof PROMOTIONPIECES)[number];
+
 type Orientation = 'whiteOnBottom' | 'blackOnBottom';
 
 type PlayerColor = 'white' | 'black';
 
-type GameState =
-  | 'begin'
-  | 'waitingForUser'
-  | 'thinking'
-  | 'checkmate'
-  | 'stalemate'
-  | 'draw';
+type GameState = 'begin' | 'waitingForUser' | 'thinking' | 'checkmate' | 'stalemate' | 'draw';
 
 type ChessBoardType = ArrayOf64<ChessPieceType>;
 type BoardMarkerType = ArrayOf64<SquareMarkerType>;
@@ -60,6 +56,7 @@ export type {
   ChessGameInfo,
   GameState,
   SquareMarkerType,
+  PromotionPiece,
   ChessPieceType,
   MoveType,
 };
