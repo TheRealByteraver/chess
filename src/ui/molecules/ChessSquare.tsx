@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import SVGPieces from 'src/media/chessPieces/SVGPieces';
+import { PlayerColor, SquareMarkerType } from 'src/types/chess';
 import {
   BOARDDEFAULT,
   EMPTY,
@@ -10,13 +12,11 @@ import {
   SELECTEDPIECE,
 } from 'src/utils/constants';
 import getClassName from 'src/utils/general/classNames';
-import SVGPieces from 'src/media/chessPieces/SVGPieces';
-import { PlayerColor, SquareMarkerType } from 'src/types/chess';
 
 type Props = {
   interactive: boolean;
   piece: number;
-  marker?: SquareMarkerType;
+  squareMarker?: SquareMarkerType;
   squareColor: PlayerColor;
   size: 'icon' | 'normal';
   onClick?: () => void;
@@ -24,7 +24,7 @@ type Props = {
 
 const ChessSquare = (props: Props): JSX.Element => {
   // PROPS
-  const { interactive, size, piece, marker = BOARDDEFAULT, squareColor, onClick } = props;
+  const { interactive, size, piece, squareMarker = BOARDDEFAULT, squareColor, onClick } = props;
 
   // METHODS
   const getBackgroundColor = (marker: SquareMarkerType): string => {
@@ -44,7 +44,7 @@ const ChessSquare = (props: Props): JSX.Element => {
 
   // VARS
   const sizeCss = size === 'icon' ? 'w-8 h-8' : 'w-20 h-20';
-  const backgroundColor = getBackgroundColor(marker);
+  const backgroundColor = getBackgroundColor(squareMarker);
   const hoverCss = getClassName([
     'absolute top-0 left-0',
     sizeCss,
