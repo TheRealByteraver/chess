@@ -1,4 +1,5 @@
 import { BoardMarkerType, ChessGameInfo } from 'src/types/chess';
+
 import { getAllAvailableMoves } from '../chess';
 import getEmptyBoardMarkersWithLastMove from './getEmptyBoardMarkersWithLastMove';
 import { POSSIBLEMOVE, SELECTEDPIECE } from '../constants';

@@ -34,6 +34,8 @@ const BoardMarkers = (props: Props): JSX.Element => {
             color = 'bg-yellow-500';
             break;
           case POSSIBLEMOVE:
+          case LASTMOVESTART + POSSIBLEMOVE:
+          case LASTMOVEEND + POSSIBLEMOVE:
             color = squareColor === 'white' ? 'bg-[#c8d496]' : 'bg-[#a9a556]';
             break;
           case LASTMOVESTART:
@@ -41,7 +43,7 @@ const BoardMarkers = (props: Props): JSX.Element => {
             color = squareColor === 'white' ? 'bg-[#fba188]' : 'bg-[#e67e5b]';
             break;
           default:
-            color = 'transparent';
+            color = 'bg-transparent';
             break;
         }
 

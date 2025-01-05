@@ -1,4 +1,5 @@
 import { ChessGameInfo } from 'src/types/chess';
+
 import { getIsValidSelection, makeMove } from '../chess';
 import getBoardMarkersTargets from './getBoardMarkersTargets';
 import getEmptyBoardMarkersWithLastMove from './getEmptyBoardMarkersWithLastMove';

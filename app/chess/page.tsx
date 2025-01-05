@@ -152,7 +152,9 @@ const Chess = (): JSX.Element => {
       <div className="inline-block border-8 border-[#d28c45]">
         <ChessBoard>
           <BoardMarkers markers={gameInfo.boardMarkers} orientation={orientation} />
-          <ChessInteractiveLayer onClick={playerClickHandler} orientation={orientation} />
+          {gameState === 'waitingForUser' && (
+            <ChessInteractiveLayer onClick={playerClickHandler} orientation={orientation} />
+          )}
           <ChessPieces board={gameInfo.game.board} orientation={orientation} />
         </ChessBoard>
       </div>
