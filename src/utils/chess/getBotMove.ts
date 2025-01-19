@@ -15,7 +15,7 @@ const pieceValues = {
   [KNIGHT]: 3,
   [BISHOP]: 3,
   [QUEEN]: 9,
-  [KING]: 12,
+  [KING]: 4,
 } as const;
 
 const evaluateMove = (game: ChessGame, move: MoveType): number => {
@@ -51,197 +51,42 @@ const getBestMove = (
   parentScore: number,
 ): EvalType => {
   const game1 = game;
-
   const moves1 = getAllAvailableMoves(game1);
-  const evalMoves1 = moves1.map((move) => ({ move, score: 1 * evaluateMove(game1, move) }));
+  if (moves1.length === 0) return { move: { square: 0, target: 0 }, score: -Infinity };
 
-  // console.log('evalMoves1:');
-  // evalMoves1.forEach((evalMove) => {
-  //   console.log(evalMove.move.square, '->', evalMove.move.target, ', score:', evalMove.score);
-  // });
-  // evalMoves1.sort((a, b) => b.score - a.score);
+  const evalMoves1 = moves1.map((move) => ({ move, score: evaluateMove(game1, move) }));
 
-  const bestMoves2: EvalType[] = [];
-  evalMoves1.forEach((evalMove, index) => {
+  const bestMoves2 = evalMoves1.map((evalMove) => {
     const game2 = makeMove(game1, evalMove.move);
     const moves2 = getAllAvailableMoves(game2);
     const evalMoves2 = moves2.map((move) => ({
       move,
-      score: 1 * evaluateMove(game2, move),
+      score: evalMove.score - evaluateMove(game2, move),
     }));
 
-    const hiScore2 = evalMoves2.reduce((acc, cur) => Math.max(acc, cur.score), -Infinity);
-    const hiScore2Move = evalMoves2.find((evalMove) => evalMove.score === hiScore2) as EvalType;
-    bestMoves2.push({
-      move: hiScore2Move.move,
-      score: evalMove.score - hiScore2Move.score,
+    const bestMoves3 = evalMoves2.map((evalMove) => {
+      const game3 = makeMove(game2, evalMove.move);
+      const moves3 = getAllAvailableMoves(game3);
+      const evalMoves3 = moves3.map((move) => ({
+        move,
+        score: evalMove.score + evaluateMove(game3, move),
+      }));
+
+      const hiScore3 = evalMoves3.reduce((acc, cur) => Math.max(acc, cur.score), -Infinity);
+      return hiScore3;
     });
 
-    // debug / console.log code
-    const { square, target } = bestMoves2[bestMoves2.length - 1].move;
-    const { score } = bestMoves2[bestMoves2.length - 1];
-    console.log(
-      evalMove.move.square,
-      '->',
-      evalMove.move.target,
-      ': best move = ',
-      square,
-      '->',
-      target,
-      ', score:',
-      score,
-    );
-
-    if (evalMove.move.square == 16 && evalMove.move.target == 33) {
-      console.log('******************************');
-      console.log('evalMoves2:');
-      evalMoves2.forEach((evalMove) => {
-        console.log(evalMove.move.square, '->', evalMove.move.target, ', score:', evalMove.score);
-      });
-      console.log('******************************');
-    }
+    const hiScore2 = bestMoves3.reduce((acc, cur) => Math.min(acc, cur), +Infinity);
+    return hiScore2;
   });
 
-  const hiScore1 = bestMoves2.reduce((acc, cur) => Math.max(acc, cur.score), -Infinity);
-  const bestMovesIndex = bestMoves2.findIndex((bestMove) => bestMove.score === hiScore1);
-  console.log('bestMoves2', bestMoves2);
-  console.log('bestMovesIndex', bestMovesIndex);
-  console.log('making move:', evalMoves1[bestMovesIndex].move);
+  const hiScore1 = bestMoves2.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
 
-  return evalMoves1[bestMovesIndex];
-
-  // const hiScore1 = evalMoves1.reduce((acc, cur) => Math.max(acc, cur.score), -Infinity);
-  // const bestMoves = moves1.filter((move, index) => scores1[index] === hiScore1);
-
-  // let bestMoves2: MoveType[] = [];
-  // moves1.forEach((move, index) => {
-  //   const game2 = makeMove(game1, move);
-
-  //   const moves2 = getAllAvailableMoves(game2);
-  //   const scores2 = moves2.map((move) => scores1[index] -1 * evaluateMove(game2, move));
-  //   const hiScore2 = scores2.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
-
-  //   const bestMoves = moves2.filter((move, index) => scores2[index] === hiScore2);
-  //   bestMoves2.push(bestMoves[0]);
-  // });
-
-  // const scores = bestMoves2.map((move) => scores1[index] -1 * evaluateMove(game2, move));
-
-  // const bestMoves = bestMoves2.filter((move, index) => scores2[index] === hiScore2);
-  // bestMoves2.push(bestMoves[0]);
-
-  // console.log('bestMoves', bestMoves2);
-  // return {
-  //   move: bestMoves2[0],
-  //   score: hiScore1,
-  // };
-
-  // let evalCount = 0;
-  // // bot move (+)
-  // // let hiScore1 = -Infinity;
-  // const moves1 = getAllAvailableMoves(game);
-  // let hiScore2 = -Infinity;
-  // moves1.forEach((move, index) => {
-  //   // player move (-)
-  //   const game2 = makeMove(game, move);
-  //   const moves2 = getAllAvailableMoves(game2);
-  //   let hiScore3 = -Infinity;
-  //   moves2.forEach((move, index) => {
-  //     // bot move (+)
-  //     const game3 = makeMove(game2, move);
-  //     const moves3 = getAllAvailableMoves(game3);
-  //     let hiScore4 = -Infinity;
-  //     moves3.forEach((move, index) => {
-  //       // player move (-)
-  //       const game4 = makeMove(game3, move);
-  //       const moves4 = getAllAvailableMoves(game4);
-  //       evalCount += moves4.length;
-
-  //       const scores4 = moves4.map((move) => -1 * evaluateMove(game4, move));
-  //       const bestScore4 = scores4.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
-  //       hiScore4 = Math.max(hiScore4, bestScore4);
-  //     });
-  //     // moves2 section
-  //     const scores3 = moves3.map((move) => 1 * evaluateMove(game3, move));
-  //     const bestScore3 = scores3.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
-  //     hiScore3 = Math.max(hiScore3, hiScore4 + bestScore3);
-  //   });
-  //   // moves1 section
-  //   const scores2 = moves2.map((move) => -1 * evaluateMove(game2, move));
-  //   const bestScore2 = scores2.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
-  //   hiScore2 = Math.max(hiScore2, hiScore3 + bestScore2);
-  // });
-  // // root section
-  // const scores1 = moves1.map((move) => ({
-  //   score: hiScore2 + 1 * evaluateMove(game, move),
-  //   move,
-  // }));
-  // const bestScore1 = scores1.reduce((acc, cur) => Math.max(acc, cur.score), -Infinity);
-  // // hiScore1 = Math.max(hiScore1, hiScore2 + bestScore1);
-  // const bestMove = scores1.find((score) => score.score === bestScore1);
-  // console.log('evalCount', evalCount);
-  // return bestMove as EvalType;
-
-  // .map((move) => {
-  //   const score = 1 * evaluateMove(game, move);
-  //   return { move, score };
-  // });
-
-  // const moves1: EvalType[] = [];
-  // evalMoves1.forEach((evalMove1) => {
-  //   const game2 = makeMove(game, evalMove1.move);
-  //   const evalMoves2 = getAllAvailableMoves(game2).map((move) => {
-  //     const score = (-1) * evaluateMove(game2, move);
-  //     return { move, score };
-  //   });
-  //   moves.push(move);
-  // });
-
-  // if (depth > 1) {
-  //   const evalMoves = getAllAvailableMoves(game).map((move) => {
-  //     const score = sign * evaluateMove(game, move);
-  //     return { move, score };
-  //   });
-
-  //   const moves: EvalType[] = [];
-  //   evalMoves.forEach((evalMove) => {
-  //     const newGame = makeMove(game, evalMove.move);
-  //     const move = getBestMove(newGame, depth - 1, -sign, parentScore + evalMove.score);
-  //     moves.push(move);
-  //   });
-  // }
-
-  // const evalMoves = getAllAvailableMoves(game).map((move) => {
-  //   const score = parentScore + sign * evaluateMove(game, move);
-  //   return { move, score };
-  // });
-
-  // if (depth <= 1) return getRandomBestMove(evalMoves, sign);
-
-  // const moves: EvalType[] = [];
-  // evalMoves.forEach((evalMove) => {
-  //   const newGame = makeMove(game, evalMove.move);
-  //   const move = getBestMove(newGame, depth - 1, -sign, parentScore + evalMove.score);
-  //   moves.push(move);
-  // });
-
-  // console.log('depth', depth);
-  // return getRandomBestMove(evalMoves, sign);
-
-  // new:
-  // const evalMoves1 = getAllAvailableMoves(game).map((move) => ({
-  //   score: sign * evaluateMove(game, move),
-  //   move,
-  // }));
-
-  // // voor iedere move, make een new game en evalueer alle moves
-
-  // const moves: EvalType[] = [];
-  // evalMoves.forEach((evalMove) => {
-  //   const newGame = makeMove(game, evalMove.move);
-  //   const move = getBestMove(newGame, depth - 1, -sign, parentScore + evalMove.score);
-  //   moves.push(move);
-  // });
+  const bestMovesIndex = bestMoves2.findIndex((bestMove) => bestMove === hiScore1);
+  return {
+    move: evalMoves1[bestMovesIndex].move,
+    score: 0 + evalMoves1[bestMovesIndex].score,
+  };
 };
 
 const getBotMove = (game: ChessGame): MoveType | undefined => {
