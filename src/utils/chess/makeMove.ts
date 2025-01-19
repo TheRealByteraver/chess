@@ -1,6 +1,12 @@
 import { ChessBoardType, ChessGame, MoveType } from 'src/types/chess';
 import { EMPTY, KING, PAWN, PIECEMASK, ROOK } from '../constants';
 
+/**
+ *
+ * @param game
+ * @param move
+ * @returns a new game object
+ */
 const makeMove = (game: ChessGame, move: MoveType): ChessGame => {
   const { square, target } = move;
   const { activeColor } = game;
@@ -82,7 +88,7 @@ const makeMove = (game: ChessGame, move: MoveType): ChessGame => {
     castling,
     enPassant,
     halfMoveClock: game.halfMoveClock + 1,
-    fullMoveNumber: game.activeColor === 'black' ? game.fullMoveNumber + 1 : game.fullMoveNumber,
+    fullMoveNumber: game.fullMoveNumber + (game.activeColor === 'black' ? 1 : 0),
   };
 };
 
