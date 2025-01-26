@@ -31,7 +31,7 @@ const ChessPieces = (props: Props): JSX.Element => {
       const piece = board[squareNr];
       row.push(
         <div className={`relative ${sizeClass}`} key={`piece-square-${i}`}>
-          {/* {squareNr} */}
+          {/* <span className="text-gray-900 font-semibold text-sm ml-1 -mt-1">{squareNr}</span> */}
           <div className={`absolute top-0 left-0 ${sizeClass}`}>
             {piece !== EMPTY && (
               <Image src={SVGPieces[piece].image} alt={SVGPieces[piece].name} fill />

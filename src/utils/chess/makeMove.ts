@@ -1,30 +1,19 @@
-import { BoardMarkerType, ChessBoardType, ChessGameInfo, MoveType } from 'src/types/chess';
-import {
-  BOARDDEFAULT,
-  EMPTY,
-  KING,
-  LASTMOVEEND,
-  LASTMOVESTART,
-  PAWN,
-  PIECEMASK,
-  ROOK,
-} from '../constants';
+import { ChessBoardType, ChessGame, MoveType } from 'src/types/chess';
+import { EMPTY, KING, PAWN, PIECEMASK, ROOK } from '../constants';
 
-const makeMove = (gameInfo: ChessGameInfo, move: MoveType): ChessGameInfo => {
-  // create empty boardMarkers object
-  const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
+/**
+ *
+ * @param game
+ * @param move
+ * @returns a new game object
+ */
+const makeMove = (game: ChessGame, move: MoveType): ChessGame => {
   const { square, target } = move;
-  const { activeColor } = gameInfo.game;
-  const opponentColor = gameInfo.game.activeColor === 'white' ? 'black' : 'white';
-
-  // mark the move on the board if it was a move made by the bot
-  if (gameInfo.playerColor !== activeColor) {
-    newBoardMarkers[square] = LASTMOVESTART;
-    newBoardMarkers[target] = LASTMOVEEND;
-  }
+  const { activeColor } = game;
+  const opponentColor = activeColor === 'white' ? 'black' : 'white';
 
   // create new board with the moved piece
-  const newBoard: ChessBoardType = [...gameInfo.game.board];
+  const newBoard: ChessBoardType = [...game.board];
 
   const pieceType = newBoard[square] & PIECEMASK;
   const capturedPieceType = newBoard[target] & PIECEMASK;
@@ -42,15 +31,15 @@ const makeMove = (gameInfo: ChessGameInfo, move: MoveType): ChessGameInfo => {
       enPassant = target + (diff > 0 ? -8 : 8);
     }
     // check if we have an en passant capture
-    if (gameInfo.game.enPassant === target) {
+    if (game.enPassant === target) {
       newBoard[target + (activeColor === 'white' ? 8 : -8)] = EMPTY;
     }
   }
 
   // castling logic
   let castling = {
-    white: { ...gameInfo.game.castling.white },
-    black: { ...gameInfo.game.castling.black },
+    white: { ...game.castling.white },
+    black: { ...game.castling.black },
   };
   if (pieceType === KING) {
     // king moved, disable castling
@@ -92,22 +81,14 @@ const makeMove = (gameInfo: ChessGameInfo, move: MoveType): ChessGameInfo => {
   }
   // end of castling logic
 
-  // construct a new gameInfo object and return it
+  // construct a new ChessGame object and return it
   return {
-    game: {
-      board: newBoard,
-      activeColor: opponentColor,
-      castling,
-      enPassant,
-      halfMoveClock: gameInfo.game.halfMoveClock + 1,
-      fullMoveNumber:
-        gameInfo.game.activeColor === 'black'
-          ? gameInfo.game.fullMoveNumber + 1
-          : gameInfo.game.fullMoveNumber,
-    },
-    playerColor: gameInfo.playerColor,
-    boardMarkers: newBoardMarkers,
-    selectedSquare: undefined,
+    board: newBoard,
+    activeColor: opponentColor,
+    castling,
+    enPassant,
+    halfMoveClock: game.halfMoveClock + 1,
+    fullMoveNumber: game.fullMoveNumber + (game.activeColor === 'black' ? 1 : 0),
   };
 };
 

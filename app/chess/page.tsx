@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
-import { ChessGameInfo, GameState, PromotionPiece } from 'src/types/chess';
-import { Button, Container, Header1, Modal } from 'src/ui/atoms';
+import { BoardMarkerType, ChessGameInfo, GameState, PromotionPiece } from 'src/types/chess';
+import { Button, Container, Header1 } from 'src/ui/atoms';
 import {
   BoardMarkers,
   ChessBoard,
   ChessInteractiveLayer,
   ChessPieces,
-  ChessSquare,
+  PromotionModal,
 } from 'src/ui/molecules';
 import {
   getAllAvailableMoves,
@@ -19,15 +19,18 @@ import {
   isInCheck,
   makeMove,
 } from 'src/utils/chess';
+import getBotMove from 'src/utils/chess/getBotMove';
 import {
   BISHOP,
-  BLACK,
   BLACKBISHOP,
   BLACKKNIGHT,
   BLACKPAWN,
   BLACKQUEEN,
   BLACKROOK,
+  BOARDDEFAULT,
   KNIGHT,
+  LASTMOVEEND,
+  LASTMOVESTART,
   PAWN,
   QUEEN,
   ROOK,
@@ -42,27 +45,43 @@ const Chess = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // EFFECTS
+  // force a redraw of the board when the game state changes
+  useEffect(() => {
+    if (gameState === 'redrawBoard') setGameState('thinking');
+  }, [gameState]);
+
   // make bot move
   useEffect(() => {
     if (gameState !== 'thinking') return;
-    const allMoves = getAllAvailableMoves(gameInfo.game);
-    if (allMoves.length > 0) {
-      const move = allMoves[Math.floor(Math.random() * allMoves.length)];
-      const newGameInfo = makeMove(gameInfo, move);
+    const botMove = getBotMove(gameInfo.game);
+    if (botMove) {
+      const newGame = makeMove(gameInfo.game, botMove);
+
+      // mark the move on the board if it was a move made by the bot
+      const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
+      if (gameInfo.playerColor !== gameInfo.game.activeColor) {
+        newBoardMarkers[botMove.square] = LASTMOVESTART;
+        newBoardMarkers[botMove.target] = LASTMOVEEND;
+      }
 
       // Pawn promotion logic
       const pawnCheck = gameInfo.game.activeColor === 'white' ? PAWN : BLACKPAWN;
-      if (newGameInfo.game.board[move.target] === pawnCheck) {
+      if (newGame.board[botMove.target] === pawnCheck) {
         const finalRow = gameInfo.game.activeColor === 'white' ? 0 : 7;
-        if (move.target >> 3 === finalRow) {
+        if (botMove.target >> 3 === finalRow) {
           const promotionPiece: PromotionPiece[] =
             gameInfo.game.activeColor === 'white'
               ? [QUEEN, ROOK, BISHOP, KNIGHT]
               : [BLACKQUEEN, BLACKROOK, BLACKBISHOP, BLACKKNIGHT];
-          newGameInfo.game.board[move.target] = promotionPiece[Math.floor(Math.random() * 4)];
+          newGame.board[botMove.target] = promotionPiece[Math.floor(Math.random() * 4)];
         }
       }
-      setGameInfo(newGameInfo);
+      setGameInfo({
+        ...gameInfo,
+        game: newGame,
+        boardMarkers: newBoardMarkers,
+        selectedSquare: undefined,
+      });
       setGameState('waitingForUser');
     }
   }, [gameInfo, gameState]);
@@ -85,7 +104,9 @@ const Chess = (): JSX.Element => {
   const startGameHandler = (): void => {
     const newGame = getNewGame();
     setGameInfo(newGame);
-    setGameState(newGame.playerColor === newGame.game.activeColor ? 'waitingForUser' : 'thinking');
+    setGameState(
+      newGame.playerColor === newGame.game.activeColor ? 'waitingForUser' : 'redrawBoard',
+    );
   };
 
   const playerClickHandler = (square: number): void => {
@@ -103,7 +124,7 @@ const Chess = (): JSX.Element => {
           return;
         }
       }
-      setGameState('thinking');
+      setGameState('redrawBoard');
     }
     // update the board markers
     setGameInfo(newGameInfo);
@@ -117,30 +138,20 @@ const Chess = (): JSX.Element => {
     const newGameInfo = getUpdatedGameOnPlayerAction(gameInfo, promotionSquare);
     newGameInfo.game.board[promotionSquare] = piece;
     setGameInfo(newGameInfo);
-    setGameState('thinking');
+    setGameState('redrawBoard');
     setIsModalOpen(false);
   };
 
   // VARS
   const orientation = gameInfo?.playerColor === 'white' ? 'whiteOnBottom' : 'blackOnBottom';
-  const colorMask = gameInfo?.game.activeColor === 'white' ? 0 : BLACK;
-  const promotionPieces: PromotionPiece[] = [QUEEN, ROOK, BISHOP, KNIGHT].map(
-    (piece) => piece | colorMask,
-  );
 
   return (
     <Container hCenter vCenter>
-      <Modal isOpen={isModalOpen}>
-        <div className="flex flex-col gap-4">
-          {promotionPieces.map((piece) => (
-            <ChessSquare
-              key={piece}
-              piece={piece}
-              onClick={() => promotionDialogClickHandler(piece)}
-            />
-          ))}
-        </div>
-      </Modal>
+      <PromotionModal
+        isOpen={isModalOpen}
+        activeColor={gameInfo?.game.activeColor}
+        promotionDialogClickHandler={promotionDialogClickHandler}
+      />
       <Header1 text="Welcome to the chess bot!" />
       {['begin', 'checkmate', 'stalemate', 'draw'].includes(gameState) && (
         <Button className="mb-6" onClick={startGameHandler}>

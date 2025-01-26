@@ -11,7 +11,14 @@ type Orientation = 'whiteOnBottom' | 'blackOnBottom';
 
 type PlayerColor = 'white' | 'black';
 
-type GameState = 'begin' | 'waitingForUser' | 'thinking' | 'checkmate' | 'stalemate' | 'draw';
+type GameState =
+  | 'begin'
+  | 'waitingForUser'
+  | 'redrawBoard'
+  | 'thinking'
+  | 'checkmate'
+  | 'stalemate'
+  | 'draw';
 
 type ChessBoardType = ArrayOf64<ChessPieceType>;
 type BoardMarkerType = ArrayOf64<SquareMarkerType>;
