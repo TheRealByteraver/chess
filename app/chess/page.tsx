@@ -45,6 +45,11 @@ const Chess = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // EFFECTS
+  // force a redraw of the board when the game state changes
+  useEffect(() => {
+    if (gameState === 'redrawBoard') setGameState('thinking');
+  }, [gameState]);
+
   // make bot move
   useEffect(() => {
     if (gameState !== 'thinking') return;
@@ -99,7 +104,9 @@ const Chess = (): JSX.Element => {
   const startGameHandler = (): void => {
     const newGame = getNewGame();
     setGameInfo(newGame);
-    setGameState(newGame.playerColor === newGame.game.activeColor ? 'waitingForUser' : 'thinking');
+    setGameState(
+      newGame.playerColor === newGame.game.activeColor ? 'waitingForUser' : 'redrawBoard',
+    );
   };
 
   const playerClickHandler = (square: number): void => {
@@ -117,7 +124,7 @@ const Chess = (): JSX.Element => {
           return;
         }
       }
-      setGameState('thinking');
+      setGameState('redrawBoard');
     }
     // update the board markers
     setGameInfo(newGameInfo);
@@ -131,7 +138,7 @@ const Chess = (): JSX.Element => {
     const newGameInfo = getUpdatedGameOnPlayerAction(gameInfo, promotionSquare);
     newGameInfo.game.board[promotionSquare] = piece;
     setGameInfo(newGameInfo);
-    setGameState('thinking');
+    setGameState('redrawBoard');
     setIsModalOpen(false);
   };
 

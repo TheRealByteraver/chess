@@ -25,22 +25,23 @@ const evaluateMove = (game: ChessGame, move: MoveType): number => {
   return pieceValues[(game.board[target] & PIECEMASK) as keyof typeof pieceValues];
 };
 
-const getRandomBestMove = (evalMoves: EvalType[], sign: number): EvalType => {
-  if (evalMoves.length === 0) return { move: { square: 0, target: 0 }, score: sign * Infinity };
-
-  const highestScore = evalMoves.reduce(
-    (max, evalMove) => Math.max(max, evalMove.score),
-    -Infinity,
-  );
-  const bestMoves = evalMoves.filter((evalMove) => evalMove.score === highestScore);
-
-  // randomly return one of the best moves
-  const randomIndex = Math.floor(Math.random() * bestMoves.length);
-
+const getEvalMoves = (
+  game: ChessGame,
+  evalMove: EvalType,
+  sign: number,
+): {
+  game: ChessGame;
+  evalMoves: EvalType[];
+} => {
+  const game2 = makeMove(game, evalMove.move);
+  const moves2 = getAllAvailableMoves(game2);
+  const evalMoves = moves2.map((move) => ({
+    move,
+    score: evalMove.score + sign * evaluateMove(game2, move),
+  }));
   return {
-    move: bestMoves[randomIndex].move,
-    // move: bestMoves[0].move,
-    score: highestScore,
+    game: game2,
+    evalMoves,
   };
 };
 
@@ -57,20 +58,10 @@ const getBestMove = (
   const evalMoves1 = moves1.map((move) => ({ move, score: evaluateMove(game1, move) }));
 
   const bestMoves2 = evalMoves1.map((evalMove) => {
-    const game2 = makeMove(game1, evalMove.move);
-    const moves2 = getAllAvailableMoves(game2);
-    const evalMoves2 = moves2.map((move) => ({
-      move,
-      score: evalMove.score - evaluateMove(game2, move),
-    }));
+    const { game: game2, evalMoves: evalMoves2 } = getEvalMoves(game1, evalMove, -1);
 
     const bestMoves3 = evalMoves2.map((evalMove) => {
-      const game3 = makeMove(game2, evalMove.move);
-      const moves3 = getAllAvailableMoves(game3);
-      const evalMoves3 = moves3.map((move) => ({
-        move,
-        score: evalMove.score + evaluateMove(game3, move),
-      }));
+      const { game: game3, evalMoves: evalMoves3 } = getEvalMoves(game2, evalMove, 1);
 
       const hiScore3 = evalMoves3.reduce((acc, cur) => Math.max(acc, cur.score), -Infinity);
       return hiScore3;
@@ -82,10 +73,12 @@ const getBestMove = (
 
   const hiScore1 = bestMoves2.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
 
-  const bestMovesIndex = bestMoves2.findIndex((bestMove) => bestMove === hiScore1);
+  const bestMoves = evalMoves1.filter((evalMove, index) => bestMoves2[index] === hiScore1);
+  const bestMovesIndex = Math.floor(Math.random() * bestMoves.length);
+
   return {
-    move: evalMoves1[bestMovesIndex].move,
-    score: 0 + evalMoves1[bestMovesIndex].score,
+    move: bestMoves[bestMovesIndex].move,
+    score: 0 + bestMoves[bestMovesIndex].score,
   };
 };
 
