@@ -34,6 +34,7 @@ const getAllAvailableMoves = (game: ChessGame): MoveType[] => {
       const kingInCheck = kingPositions.some((target) => isInCheck(game, { square, target }));
       if (!kingInCheck) allMoves.push({ square, target });
     });
+    // end of castling logic
   }
 
   const legalMoves = allMoves.filter((move) => !isInCheck(game, move));

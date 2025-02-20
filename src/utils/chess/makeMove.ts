@@ -1,13 +1,31 @@
-import { ChessBoardType, ChessGame, MoveType } from 'src/types/chess';
-import { EMPTY, KING, PAWN, PIECEMASK, ROOK } from '../constants';
+import { ChessBoardType, ChessGame, ChessPieceType, MoveType } from 'src/types/chess';
+import {
+  BISHOP,
+  BLACKBISHOP,
+  BLACKKNIGHT,
+  BLACKQUEEN,
+  BLACKROOK,
+  EMPTY,
+  KING,
+  KNIGHT,
+  PAWN,
+  PIECEMASK,
+  QUEEN,
+  ROOK,
+  WHITEBISHOP,
+  WHITEKNIGHT,
+  WHITEQUEEN,
+  WHITEROOK,
+} from '../constants';
 
 /**
  *
  * @param game
  * @param move
+ * @param promotionPiece: QUEEN | ROOK | BISHOP | KNIGHT
  * @returns a new game object
  */
-const makeMove = (game: ChessGame, move: MoveType): ChessGame => {
+const makeMove = (game: ChessGame, move: MoveType, promotionPiece?: ChessPieceType): ChessGame => {
   const { square, target } = move;
   const { activeColor } = game;
   const opponentColor = activeColor === 'white' ? 'black' : 'white';
@@ -21,6 +39,25 @@ const makeMove = (game: ChessGame, move: MoveType): ChessGame => {
   // move the piece to the new position
   newBoard[target] = newBoard[square];
   newBoard[square] = EMPTY;
+
+  // promotion logic
+  if (pieceType === PAWN && promotionPiece) {
+    const PIECE_MAP: Record<'black' | 'white', Record<ChessPieceType, ChessPieceType>> = {
+      white: {
+        [QUEEN]: WHITEQUEEN,
+        [ROOK]: WHITEROOK,
+        [BISHOP]: WHITEBISHOP,
+        [KNIGHT]: WHITEKNIGHT,
+      },
+      black: {
+        [QUEEN]: BLACKQUEEN,
+        [ROOK]: BLACKROOK,
+        [BISHOP]: BLACKBISHOP,
+        [KNIGHT]: BLACKKNIGHT,
+      },
+    };
+    newBoard[target] = PIECE_MAP[activeColor][promotionPiece];
+  }
 
   // en passant logic
   let enPassant: number | undefined = undefined;

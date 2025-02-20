@@ -19,7 +19,6 @@ import {
   isInCheck,
   makeMove,
 } from 'src/utils/chess';
-import getBotMove from 'src/utils/chess/getBotMove';
 import {
   BISHOP,
   BLACKBISHOP,
@@ -53,37 +52,41 @@ const Chess = (): JSX.Element => {
   // make bot move
   useEffect(() => {
     if (gameState !== 'thinking') return;
-    const botMove = getBotMove(gameInfo.game);
-    if (botMove) {
-      const newGame = makeMove(gameInfo.game, botMove);
+    fetch('/api/v1001/get_bot_move?game=' + JSON.stringify(gameInfo.game))
+      .then((res) => res.json())
+      .then((botMove) => {
+        if (botMove) {
+          const newGame = makeMove(gameInfo.game, botMove);
 
-      // mark the move on the board if it was a move made by the bot
-      const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
-      if (gameInfo.playerColor !== gameInfo.game.activeColor) {
-        newBoardMarkers[botMove.square] = LASTMOVESTART;
-        newBoardMarkers[botMove.target] = LASTMOVEEND;
-      }
+          // mark the move on the board if it was a move made by the bot
+          const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
+          if (gameInfo.playerColor !== gameInfo.game.activeColor) {
+            newBoardMarkers[botMove.square] = LASTMOVESTART;
+            newBoardMarkers[botMove.target] = LASTMOVEEND;
+          }
 
-      // Pawn promotion logic
-      const pawnCheck = gameInfo.game.activeColor === 'white' ? PAWN : BLACKPAWN;
-      if (newGame.board[botMove.target] === pawnCheck) {
-        const finalRow = gameInfo.game.activeColor === 'white' ? 0 : 7;
-        if (botMove.target >> 3 === finalRow) {
-          const promotionPiece: PromotionPiece[] =
-            gameInfo.game.activeColor === 'white'
-              ? [QUEEN, ROOK, BISHOP, KNIGHT]
-              : [BLACKQUEEN, BLACKROOK, BLACKBISHOP, BLACKKNIGHT];
-          newGame.board[botMove.target] = promotionPiece[Math.floor(Math.random() * 4)];
+          // Pawn promotion logic
+          const pawnCheck = gameInfo.game.activeColor === 'white' ? PAWN : BLACKPAWN;
+          if (newGame.board[botMove.target] === pawnCheck) {
+            const finalRow = gameInfo.game.activeColor === 'white' ? 0 : 7;
+            if (botMove.target >> 3 === finalRow) {
+              const promotionPiece: PromotionPiece[] =
+                gameInfo.game.activeColor === 'white'
+                  ? [QUEEN, ROOK, BISHOP, KNIGHT]
+                  : [BLACKQUEEN, BLACKROOK, BLACKBISHOP, BLACKKNIGHT];
+              // default to queen right now
+              newGame.board[botMove.target] = promotionPiece[0];
+            }
+          }
+          setGameInfo({
+            ...gameInfo,
+            game: newGame,
+            boardMarkers: newBoardMarkers,
+            selectedSquare: undefined,
+          });
+          setGameState('waitingForUser');
         }
-      }
-      setGameInfo({
-        ...gameInfo,
-        game: newGame,
-        boardMarkers: newBoardMarkers,
-        selectedSquare: undefined,
       });
-      setGameState('waitingForUser');
-    }
   }, [gameInfo, gameState]);
 
   // if there are only two kings left, it's a draw
@@ -145,6 +148,8 @@ const Chess = (): JSX.Element => {
   // VARS
   const orientation = gameInfo?.playerColor === 'white' ? 'whiteOnBottom' : 'blackOnBottom';
 
+  console.log('gameState', gameState);
+
   return (
     <Container hCenter vCenter>
       <PromotionModal
@@ -158,7 +163,6 @@ const Chess = (): JSX.Element => {
           Start a new Game
         </Button>
       )}
-      <p className="mb-6">Game state: {gameState}</p>
 
       <div className="inline-block border-8 border-[#d28c45]">
         <ChessBoard>

@@ -1,7 +1,6 @@
 import { ChessGame, MoveType } from 'src/types/chess';
-import getAllAvailableMoves from './getAllAvailableMoves';
-import makeMove from './makeMove';
-import { BISHOP, EMPTY, KING, KNIGHT, PAWN, PIECEMASK, QUEEN, ROOK } from '../constants';
+import { getAllAvailableMoves, getPieceXY, makeMove } from 'src/utils/chess';
+import { BISHOP, EMPTY, KING, KNIGHT, PAWN, PIECEMASK, QUEEN, ROOK } from 'src/utils/constants';
 
 type EvalType = {
   move: MoveType;
@@ -19,7 +18,14 @@ const pieceValues = {
 } as const;
 
 const evaluateMove = (game: ChessGame, move: MoveType): number => {
-  const { target } = move;
+  const { square, target } = move;
+
+  // pawn promotion logic
+  const [, y] = getPieceXY(target);
+  const finalRow = game.activeColor === 'white' ? 0 : 7;
+  if ((game.board[square] & PIECEMASK) === PAWN && y === finalRow) {
+    return pieceValues[QUEEN];
+  }
 
   // simply return the value of the captured piece
   return pieceValues[(game.board[target] & PIECEMASK) as keyof typeof pieceValues];
