@@ -38,6 +38,7 @@ import { getUpdatedGameOnPlayerAction } from 'src/utils/playLogic';
 
 const Chess = (): JSX.Element => {
   // STATE
+  const [gameMode, setGameMode] = useState<'bot vs bot' | 'player vs bot'>('player vs bot');
   const [gameState, setGameState] = useState<GameState>('begin');
   const [gameInfo, setGameInfo] = useState<ChessGameInfo>(getDefaultGame());
   const [promotionSquare, setPromotionSquare] = useState<number | undefined>();
@@ -51,42 +52,84 @@ const Chess = (): JSX.Element => {
 
   // make bot move
   useEffect(() => {
-    if (gameState !== 'thinking') return;
-    fetch('/api/v1001/get_bot_move?game=' + JSON.stringify(gameInfo.game))
-      .then((res) => res.json())
-      .then((botMove) => {
-        if (botMove) {
-          const newGame = makeMove(gameInfo.game, botMove);
+    if (gameState !== 'thinking' && gameState !== 'waitingForUser') return;
+    if (gameMode === 'player vs bot' && gameState === 'waitingForUser') return;
 
-          // mark the move on the board if it was a move made by the bot
-          const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
-          if (gameInfo.playerColor !== gameInfo.game.activeColor) {
-            newBoardMarkers[botMove.square] = LASTMOVESTART;
-            newBoardMarkers[botMove.target] = LASTMOVEEND;
-          }
+    if (gameState === 'waitingForUser') {
+      fetch('/api/v1002/get_bot_move?game=' + JSON.stringify(gameInfo.game))
+        .then((res) => res.json())
+        .then((data) => {
+          const botMove = data.move;
+          if (botMove) {
+            const newGame = makeMove(gameInfo.game, botMove);
 
-          // Pawn promotion logic
-          const pawnCheck = gameInfo.game.activeColor === 'white' ? PAWN : BLACKPAWN;
-          if (newGame.board[botMove.target] === pawnCheck) {
-            const finalRow = gameInfo.game.activeColor === 'white' ? 0 : 7;
-            if (botMove.target >> 3 === finalRow) {
-              const promotionPiece: PromotionPiece[] =
-                gameInfo.game.activeColor === 'white'
-                  ? [QUEEN, ROOK, BISHOP, KNIGHT]
-                  : [BLACKQUEEN, BLACKROOK, BLACKBISHOP, BLACKKNIGHT];
-              // default to queen right now
-              newGame.board[botMove.target] = promotionPiece[0];
+            // mark the move on the board if it was a move made by the bot
+            const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
+            if (gameInfo.playerColor !== gameInfo.game.activeColor) {
+              newBoardMarkers[botMove.square] = LASTMOVESTART;
+              newBoardMarkers[botMove.target] = LASTMOVEEND;
             }
+
+            // Pawn promotion logic
+            const pawnCheck = gameInfo.game.activeColor === 'white' ? PAWN : BLACKPAWN;
+            if (newGame.board[botMove.target] === pawnCheck) {
+              const finalRow = gameInfo.game.activeColor === 'white' ? 0 : 7;
+              if (botMove.target >> 3 === finalRow) {
+                const promotionPiece: PromotionPiece[] =
+                  gameInfo.game.activeColor === 'white'
+                    ? [QUEEN, ROOK, BISHOP, KNIGHT]
+                    : [BLACKQUEEN, BLACKROOK, BLACKBISHOP, BLACKKNIGHT];
+                // default to queen right now
+                newGame.board[botMove.target] = promotionPiece[0];
+              }
+            }
+            setGameInfo({
+              ...gameInfo,
+              game: newGame,
+              boardMarkers: newBoardMarkers,
+              selectedSquare: undefined,
+            });
+            setGameState('redrawBoard');
           }
-          setGameInfo({
-            ...gameInfo,
-            game: newGame,
-            boardMarkers: newBoardMarkers,
-            selectedSquare: undefined,
-          });
-          setGameState('waitingForUser');
-        }
-      });
+        });
+    } else {
+      fetch('/api/v1001/get_bot_move?game=' + JSON.stringify(gameInfo.game))
+        .then((res) => res.json())
+        .then((data) => {
+          const botMove = data.move;
+          if (botMove) {
+            const newGame = makeMove(gameInfo.game, botMove);
+
+            // mark the move on the board if it was a move made by the bot
+            const newBoardMarkers = Array(64).fill(BOARDDEFAULT) as BoardMarkerType;
+            if (gameInfo.playerColor !== gameInfo.game.activeColor) {
+              newBoardMarkers[botMove.square] = LASTMOVESTART;
+              newBoardMarkers[botMove.target] = LASTMOVEEND;
+            }
+
+            // Pawn promotion logic
+            const pawnCheck = gameInfo.game.activeColor === 'white' ? PAWN : BLACKPAWN;
+            if (newGame.board[botMove.target] === pawnCheck) {
+              const finalRow = gameInfo.game.activeColor === 'white' ? 0 : 7;
+              if (botMove.target >> 3 === finalRow) {
+                const promotionPiece: PromotionPiece[] =
+                  gameInfo.game.activeColor === 'white'
+                    ? [QUEEN, ROOK, BISHOP, KNIGHT]
+                    : [BLACKQUEEN, BLACKROOK, BLACKBISHOP, BLACKKNIGHT];
+                // default to queen right now
+                newGame.board[botMove.target] = promotionPiece[0];
+              }
+            }
+            setGameInfo({
+              ...gameInfo,
+              game: newGame,
+              boardMarkers: newBoardMarkers,
+              selectedSquare: undefined,
+            });
+            setGameState('waitingForUser');
+          }
+        });
+    }
   }, [gameInfo, gameState]);
 
   // if there are only two kings left, it's a draw
@@ -110,6 +153,11 @@ const Chess = (): JSX.Element => {
     setGameState(
       newGame.playerColor === newGame.game.activeColor ? 'waitingForUser' : 'redrawBoard',
     );
+  };
+
+  const gameModeHandler = (): void => {
+    if (gameMode === 'bot vs bot') setGameMode('player vs bot');
+    else setGameMode('bot vs bot');
   };
 
   const playerClickHandler = (square: number): void => {
@@ -158,11 +206,17 @@ const Chess = (): JSX.Element => {
         promotionDialogClickHandler={promotionDialogClickHandler}
       />
       <Header1 text="Welcome to the chess bot!" />
-      {['begin', 'checkmate', 'stalemate', 'draw'].includes(gameState) && (
-        <Button className="mb-6" onClick={startGameHandler}>
-          Start a new Game
+
+      <div className="flex flex-row justify-center gap-4">
+        {['begin', 'checkmate', 'stalemate', 'draw'].includes(gameState) && (
+          <Button className="mb-6" onClick={startGameHandler}>
+            Start a new Game
+          </Button>
+        )}
+        <Button className="mb-6" onClick={gameModeHandler}>
+          Mode: {gameMode}
         </Button>
-      )}
+      </div>
 
       <div className="inline-block border-8 border-[#d28c45]">
         <ChessBoard>

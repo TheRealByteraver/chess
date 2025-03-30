@@ -57,7 +57,7 @@ const getBestMove = (
   sign: number,
   parentScore: number,
 ): EvalType => {
-  console.log('called v1001 getBotMove');
+  console.log('called v1002 getBotMove');
   const game1 = game;
   const moves1 = getAllAvailableMoves(game1);
   if (moves1.length === 0) return { move: { square: 0, target: 0 }, score: -Infinity };
@@ -70,7 +70,14 @@ const getBestMove = (
     const bestMoves3 = evalMoves2.map((evalMove) => {
       const { game: game3, evalMoves: evalMoves3 } = getEvalMoves(game2, evalMove, 1);
 
-      const hiScore3 = evalMoves3.reduce((acc, cur) => Math.max(acc, cur.score), -Infinity);
+      const bestMoves4 = evalMoves3.map((evalMove) => {
+        const { game: game4, evalMoves: evalMoves4 } = getEvalMoves(game3, evalMove, -1);
+
+        const hiScore4 = evalMoves4.reduce((acc, cur) => Math.min(acc, cur.score), +Infinity);
+        return hiScore4;
+      });
+
+      const hiScore3 = bestMoves4.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
       return hiScore3;
     });
 
