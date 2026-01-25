@@ -1,6 +1,7 @@
 import { ChessGame } from 'src/types/chess';
-import getPieceColor from './getPieceColor';
+
 import { EMPTY } from '../constants';
+import getPieceColor from './getPieceColor';
 import getPieceXY from './getPieceXY';
 
 const getPawnMoves = (game: ChessGame, square: number): number[] => {

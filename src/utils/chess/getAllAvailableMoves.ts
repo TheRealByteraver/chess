@@ -1,9 +1,9 @@
 import { ChessGame, MoveType } from 'src/types/chess';
 
-import getPieceColor from './getPieceColor';
-import getPieceAvailableMoves from './getPieceAvailableMoves';
-import isInCheck from './isInCheck';
 import { KING, PIECEMASK } from '../constants';
+import getPieceAvailableMoves from './getPieceAvailableMoves';
+import getPieceColor from './getPieceColor';
+import isInCheck from './isInCheck';
 
 const getAllAvailableMoves = (game: ChessGame): MoveType[] => {
   const allMoves: MoveType[] = [];
@@ -31,7 +31,9 @@ const getAllAvailableMoves = (game: ChessGame): MoveType[] => {
     castlingMoves.forEach((target) => {
       const delta = target - square;
       const kingPositions = [square, square + (delta >> 1), target];
-      const kingInCheck = kingPositions.some((target) => isInCheck(game, { square, target }));
+      const kingInCheck = kingPositions.some((checkTarget) =>
+        isInCheck(game, { square, target: checkTarget }),
+      );
       if (!kingInCheck) allMoves.push({ square, target });
     });
     // end of castling logic

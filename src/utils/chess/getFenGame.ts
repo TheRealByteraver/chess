@@ -2,6 +2,7 @@
 // FEN start pos: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 
 import { ChessBoardType, ChessGame } from 'src/types/chess';
+
 import {
   BLACKBISHOP,
   BLACKKING,

@@ -1,11 +1,13 @@
 import getAllAvailableMoves from './getAllAvailableMoves';
 import getBgColor from './getBgColor';
 import getBishopMoves from './getBishopMoves';
+import getDefaultGame from './getDefaultGame';
 import getFenGame from './getFenGame';
 import getIsValidSelection from './getIsValidSelection';
 import getKingMoves from './getKingMoves';
 import getKnightMoves from './getKnightMoves';
 import getNewGame from './getNewGame';
+import getNrOfPieces from './getNrOfPieces';
 import getPawnMoves from './getPawnMoves';
 import getPieceAvailableMoves from './getPieceAvailableMoves';
 import getPieceColor from './getPieceColor';
@@ -13,8 +15,6 @@ import getPieceXY from './getPieceXY';
 import getRookMoves from './getRookMoves';
 import isInCheck from './isInCheck';
 import makeMove from './makeMove';
-import getNrOfPieces from './getNrOfPieces';
-import getDefaultGame from './getDefaultGame';
 
 export {
   getAllAvailableMoves,

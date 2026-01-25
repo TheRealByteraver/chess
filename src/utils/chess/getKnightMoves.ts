@@ -1,7 +1,8 @@
 import { ChessGame } from 'src/types/chess';
+
+import { EMPTY } from '../constants';
 import getPieceColor from './getPieceColor';
 import getPieceXY from './getPieceXY';
-import { EMPTY } from '../constants';
 
 const getKnightMoves = (game: ChessGame, square: number): number[] => {
   // PROPS
@@ -23,13 +24,13 @@ const getKnightMoves = (game: ChessGame, square: number): number[] => {
     [x - 1, y + 2],
     [x + 1, y + 2],
   ]
-    .filter(([x, y]) => x >= 0 && x < 8 && y >= 0 && y < 8)
-    .filter(([x, y]) => {
-      const target = board[y * 8 + x];
+    .filter(([posX, posY]) => posX >= 0 && posX < 8 && posY >= 0 && posY < 8)
+    .filter(([posX, posY]) => {
+      const target = board[posY * 8 + posX];
       return target === EMPTY || getPieceColor(target) === opponentColor;
     });
 
-  return knightPositions.map(([x, y]) => y * 8 + x);
+  return knightPositions.map(([posX, posY]) => posY * 8 + posX);
 };
 
 export default getKnightMoves;

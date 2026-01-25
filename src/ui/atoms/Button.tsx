@@ -1,5 +1,6 @@
-import getClassName from 'src/utils/general/classNames';
 import { ReactNode } from 'react';
+
+import getClassName from 'src/utils/general/classNames';
 
 type Props = {
   onClick?: () => void;

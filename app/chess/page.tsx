@@ -130,7 +130,7 @@ const Chess = (): JSX.Element => {
           }
         });
     }
-  }, [gameInfo, gameState]);
+  }, [gameInfo, gameMode, gameState]);
 
   // if there are only two kings left, it's a draw
   useEffect(() => {
@@ -196,7 +196,7 @@ const Chess = (): JSX.Element => {
   // VARS
   const orientation = gameInfo?.playerColor === 'white' ? 'whiteOnBottom' : 'blackOnBottom';
 
-  console.log('gameState', gameState);
+  // console.log('gameState', gameState);
 
   return (
     <Container hCenter vCenter>

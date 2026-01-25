@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import Image from 'next/image';
 
 import SVGPieces from 'src/media/chessPieces/SVGPieces';

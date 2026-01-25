@@ -1,4 +1,5 @@
 import { ChessGame, PlayerColor } from 'src/types/chess';
+
 import getPieceColor from './getPieceColor';
 
 const getIsValidSelection = (

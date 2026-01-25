@@ -3,7 +3,6 @@
     "next/core-web-vitals",
     "plugin:react/recommended",
     "airbnb-typescript",
-    "airbnb/hooks",
     // "prettier",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -35,7 +34,7 @@
     "next.config.js",
     "_error.js"
   ],
-  "plugins": ["react", "prettier", "@typescript-eslint", "import", "jsx-a11y", "react-hooks"],
+  "plugins": ["react", "prettier", "@typescript-eslint", "import", "jsx-a11y"],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
     "arrow-body-style": ["error", "as-needed"],

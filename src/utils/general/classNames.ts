@@ -1,5 +1,3 @@
-const getClassName = (classes: string[]): string => {
-  return classes.join(' ');
-};
+const getClassName = (classes: string[]): string => classes.join(' ');
 
 export default getClassName;

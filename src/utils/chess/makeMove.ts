@@ -1,4 +1,5 @@
 import { ChessBoardType, ChessGame, ChessPieceType, MoveType } from 'src/types/chess';
+
 import {
   BISHOP,
   BLACKBISHOP,
@@ -74,7 +75,7 @@ const makeMove = (game: ChessGame, move: MoveType, promotionPiece?: ChessPieceTy
   }
 
   // castling logic
-  let castling = {
+  const castling = {
     white: { ...game.castling.white },
     black: { ...game.castling.black },
   };

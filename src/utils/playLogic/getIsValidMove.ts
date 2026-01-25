@@ -1,4 +1,5 @@
 import { ChessGame, MoveType } from 'src/types/chess';
+
 import { getAllAvailableMoves } from '../chess';
 
 const getIsValidMove = (game: ChessGame, move: MoveType): boolean => {

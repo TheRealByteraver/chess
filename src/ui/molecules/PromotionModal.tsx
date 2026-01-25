@@ -1,7 +1,8 @@
 import { PlayerColor, PromotionPiece } from 'src/types/chess';
+import { BISHOP, BLACK, KNIGHT, QUEEN, ROOK } from 'src/utils/constants';
+
 import { Modal } from '../atoms';
 import ChessSquare from './ChessSquare';
-import { BISHOP, BLACK, KNIGHT, QUEEN, ROOK } from 'src/utils/constants';
 
 type Props = {
   activeColor: PlayerColor;

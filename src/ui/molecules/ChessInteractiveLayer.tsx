@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { Orientation } from 'src/types/chess';
 
 type sizeType = 'icon' | 'normal';

@@ -1,11 +1,12 @@
 import { ChessGame } from 'src/types/chess';
+
 import getPieceColor from './getPieceColor';
 import { BISHOP, KING, KNIGHT, PAWN, PIECEMASK, QUEEN, ROOK } from '../constants';
-import getPawnMoves from './getPawnMoves';
-import getRookMoves from './getRookMoves';
-import getKnightMoves from './getKnightMoves';
 import getBishopMoves from './getBishopMoves';
 import getKingMoves from './getKingMoves';
+import getKnightMoves from './getKnightMoves';
+import getPawnMoves from './getPawnMoves';
+import getRookMoves from './getRookMoves';
 
 const getPieceAvailableMoves = (game: ChessGame, square: number): number[] => {
   // PROPS
@@ -20,31 +21,37 @@ const getPieceAvailableMoves = (game: ChessGame, square: number): number[] => {
   const moves: number[] = [];
 
   switch (pieceType) {
-    case PAWN:
+    case PAWN: {
       const pawnMoves = getPawnMoves(game, square);
       moves.push(...pawnMoves);
       break;
-    case ROOK:
+    }
+    case ROOK: {
       const rookMoves = getRookMoves(game, square);
       moves.push(...rookMoves);
       break;
-    case KNIGHT:
+    }
+    case KNIGHT: {
       const knightMoves = getKnightMoves(game, square);
       moves.push(...knightMoves);
       break;
-    case BISHOP:
+    }
+    case BISHOP: {
       const bishopMoves = getBishopMoves(game, square);
       moves.push(...bishopMoves);
       break;
-    case QUEEN:
+    }
+    case QUEEN: {
       const straightMoves = getRookMoves(game, square);
       const diagonalMoves = getBishopMoves(game, square);
       moves.push(...straightMoves, ...diagonalMoves);
       break;
-    case KING:
+    }
+    case KING: {
       const kingMoves = getKingMoves(game, square);
       moves.push(...kingMoves);
       break;
+    }
     default:
       break;
   }

@@ -1,4 +1,5 @@
 import { ChessGame } from 'src/types/chess';
+
 import { EMPTY } from '../constants';
 import getPieceColor from './getPieceColor';
 import getPieceXY from './getPieceXY';
@@ -17,37 +18,37 @@ const getRookMoves = (game: ChessGame, square: number): number[] => {
 
   // up
   for (let i = y - 1; i >= 0; i--) {
-    const square = i * 8 + x;
-    if (board[square] === EMPTY) moves.push(square);
+    const targetSquare = i * 8 + x;
+    if (board[targetSquare] === EMPTY) moves.push(targetSquare);
     else {
-      if (getPieceColor(board[square]) === opponentColor) moves.push(square);
+      if (getPieceColor(board[targetSquare]) === opponentColor) moves.push(targetSquare);
       break;
     }
   }
   // down
   for (let i = y + 1; i < 8; i++) {
-    const square = i * 8 + x;
-    if (board[square] === EMPTY) moves.push(square);
+    const targetSquare = i * 8 + x;
+    if (board[targetSquare] === EMPTY) moves.push(targetSquare);
     else {
-      if (getPieceColor(board[square]) === opponentColor) moves.push(square);
+      if (getPieceColor(board[targetSquare]) === opponentColor) moves.push(targetSquare);
       break;
     }
   }
   // left
   for (let i = x - 1; i >= 0; i--) {
-    const square = y * 8 + i;
-    if (board[square] === EMPTY) moves.push(square);
+    const targetSquare = y * 8 + i;
+    if (board[targetSquare] === EMPTY) moves.push(targetSquare);
     else {
-      if (getPieceColor(board[square]) === opponentColor) moves.push(square);
+      if (getPieceColor(board[targetSquare]) === opponentColor) moves.push(targetSquare);
       break;
     }
   }
   // right
   for (let i = x + 1; i < 8; i++) {
-    const square = y * 8 + i;
-    if (board[square] === EMPTY) moves.push(square);
+    const targetSquare = y * 8 + i;
+    if (board[targetSquare] === EMPTY) moves.push(targetSquare);
     else {
-      if (getPieceColor(board[square]) === opponentColor) moves.push(square);
+      if (getPieceColor(board[targetSquare]) === opponentColor) moves.push(targetSquare);
       break;
     }
   }

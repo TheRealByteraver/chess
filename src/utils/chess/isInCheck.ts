@@ -1,7 +1,8 @@
 import { ChessBoardType, ChessGame, MoveType } from 'src/types/chess';
+
 import { BLACKKING, EMPTY, WHITEKING } from '../constants';
-import getPieceColor from './getPieceColor';
 import getPieceAvailableMoves from './getPieceAvailableMoves';
+import getPieceColor from './getPieceColor';
 
 const isInCheck = (game: ChessGame, move: MoveType): boolean => {
   const testBoard: ChessBoardType = [...game.board];
@@ -21,7 +22,7 @@ const isInCheck = (game: ChessGame, move: MoveType): boolean => {
     if (getPieceColor(testBoard[square]) !== testGame.activeColor) continue;
 
     const moves = getPieceAvailableMoves(testGame, square);
-    for (const move of moves) if (testBoard[move] === testKing) return true;
+    for (const moveTarget of moves) if (testBoard[moveTarget] === testKing) return true;
   }
 
   return false;

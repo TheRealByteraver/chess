@@ -1,14 +1,13 @@
 import { ChessGameInfo } from 'src/types/chess';
-import getFenGame from './getFenGame';
+
 import { FENSTART } from '../constants';
 import { getEmptyBoardMarkers } from '../playLogic';
+import getFenGame from './getFenGame';
 
-const getDefaultGame = (): ChessGameInfo => {
-  return {
-    game: getFenGame(FENSTART),
-    playerColor: 'white',
-    boardMarkers: getEmptyBoardMarkers(),
-  };
-};
+const getDefaultGame = (): ChessGameInfo => ({
+  game: getFenGame(FENSTART),
+  playerColor: 'white',
+  boardMarkers: getEmptyBoardMarkers(),
+});
 
 export default getDefaultGame;

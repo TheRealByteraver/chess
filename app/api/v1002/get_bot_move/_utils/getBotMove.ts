@@ -53,11 +53,11 @@ const getEvalMoves = (
 
 const getBestMove = (
   game: ChessGame,
-  depth: number,
-  sign: number,
-  parentScore: number,
+  // depth: number,
+  // sign: number,
+  // parentScore: number,
 ): EvalType => {
-  console.log('called v1002 getBotMove');
+  // console.log('called v1002 getBotMove');
   const game1 = game;
   const moves1 = getAllAvailableMoves(game1);
   if (moves1.length === 0) return { move: { square: 0, target: 0 }, score: -Infinity };
@@ -67,11 +67,11 @@ const getBestMove = (
   const bestMoves2 = evalMoves1.map((evalMove) => {
     const { game: game2, evalMoves: evalMoves2 } = getEvalMoves(game1, evalMove, -1);
 
-    const bestMoves3 = evalMoves2.map((evalMove) => {
-      const { game: game3, evalMoves: evalMoves3 } = getEvalMoves(game2, evalMove, 1);
+    const bestMoves3 = evalMoves2.map((evalMove2) => {
+      const { game: game3, evalMoves: evalMoves3 } = getEvalMoves(game2, evalMove2, 1);
 
-      const bestMoves4 = evalMoves3.map((evalMove) => {
-        const { game: game4, evalMoves: evalMoves4 } = getEvalMoves(game3, evalMove, -1);
+      const bestMoves4 = evalMoves3.map((evalMove3) => {
+        const { /*game: game4,*/ evalMoves: evalMoves4 } = getEvalMoves(game3, evalMove3, -1);
 
         const hiScore4 = evalMoves4.reduce((acc, cur) => Math.min(acc, cur.score), +Infinity);
         return hiScore4;
@@ -97,10 +97,10 @@ const getBestMove = (
 };
 
 const getBotMove = (game: ChessGame): MoveType | undefined => {
-  const depth = 4;
-  const bestMove = getBestMove(game, depth, 1, 0);
+  // const depth = 4;
+  const bestMove = getBestMove(game /*, depth, 1, 0*/);
 
-  const { move, score } = bestMove;
+  const { move /*, score*/ } = bestMove;
   if (move.square === 0 && move.target === 0) return undefined;
   return move;
 };

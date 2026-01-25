@@ -1,16 +1,4 @@
 // svg's taken from https://commons.wikimedia.org/wiki/Template:SVG_chess_pieces
-import whitePawn from './whitePawn.svg';
-import whiteKnight from './whiteKnight.svg';
-import whiteBishop from './whiteBishop.svg';
-import whiteRook from './whiteRook.svg';
-import whiteQueen from './whiteQueen.svg';
-import whiteKing from './whiteKing.svg';
-import blackPawn from './blackPawn.svg';
-import blackKnight from './blackKnight.svg';
-import blackBishop from './blackBishop.svg';
-import blackRook from './blackRook.svg';
-import blackQueen from './blackQueen.svg';
-import blackKing from './blackKing.svg';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 import {
@@ -28,6 +16,19 @@ import {
   WHITEQUEEN,
   WHITEROOK,
 } from 'src/utils/constants';
+
+import blackBishop from './blackBishop.svg';
+import blackKing from './blackKing.svg';
+import blackKnight from './blackKnight.svg';
+import blackPawn from './blackPawn.svg';
+import blackQueen from './blackQueen.svg';
+import blackRook from './blackRook.svg';
+import whiteBishop from './whiteBishop.svg';
+import whiteKing from './whiteKing.svg';
+import whiteKnight from './whiteKnight.svg';
+import whitePawn from './whitePawn.svg';
+import whiteQueen from './whiteQueen.svg';
+import whiteRook from './whiteRook.svg';
 
 // VARS
 const SVGPieces: Record<number, { image: StaticImport; name: string }> = {
