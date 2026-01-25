@@ -29,6 +29,9 @@ const chessMiddlegames: string[] = [
 ];
 
 const FENSTART = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+// 2 rooks against a king
+// const FENSTART = '/4k////3K/3R/3R w KQkq - 0 1';
 // const FENSTART = chessMiddlegames[6];
 
 const EMPTY = 0;

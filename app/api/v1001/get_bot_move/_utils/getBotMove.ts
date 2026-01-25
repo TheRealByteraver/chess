@@ -51,19 +51,41 @@ const getEvalMoves = (
   };
 };
 
-const getBestMove = (
-  game: ChessGame,
-  depth: number,
-  sign: number,
-  parentScore: number,
-): EvalType => {
-  console.log('called v1001 getBotMove');
+const getBestMove = (game: ChessGame, depth: number): EvalType => {
+  // const moves = getAllAvailableMoves(game);
+
+  // let bestScore = -Infinity;
+  // if (depth === 1) {
+  //   const evals = moves.map((move) => evaluateMove(game, move));
+  //   bestScore = evals.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
+  // }
+
+  // if (depth > 1) {
+  //   if (depth === 3) console.log('moves at depth', depth, ': ', moves.length);
+  //   const bestMoves = moves.map((move) => {
+  //     const newGame = makeMove(game, move);
+  //     return {
+  //       score: -getBestMove(newGame, depth - 1),
+  //       move,
+  //     };
+  //   });
+
+  //   const evals = bestMoves.map((move) => evaluateMove(game, move.move));
+  //   bestScore = evals.reduce((acc, cur) => Math.max(acc, cur), -Infinity);
+  // }
+
+  // // prevent crash
+  // const blahmoves = getAllAvailableMoves(game);
+  // return {
+  //   move: blahmoves[0],
+  //   score: 0,
+  // };
+
   const game1 = game;
   const moves1 = getAllAvailableMoves(game1);
   if (moves1.length === 0) return { move: { square: 0, target: 0 }, score: -Infinity };
 
   const evalMoves1 = moves1.map((move) => ({ move, score: evaluateMove(game1, move) }));
-
   const bestMoves2 = evalMoves1.map((evalMove) => {
     const { game: game2, evalMoves: evalMoves2 } = getEvalMoves(game1, evalMove, -1);
 
@@ -91,7 +113,7 @@ const getBestMove = (
 
 const getBotMove = (game: ChessGame): MoveType | undefined => {
   const depth = 4;
-  const bestMove = getBestMove(game, depth, 1, 0);
+  const bestMove = getBestMove(game, depth);
 
   const { move, score } = bestMove;
   if (move.square === 0 && move.target === 0) return undefined;
