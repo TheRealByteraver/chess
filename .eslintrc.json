@@ -30,6 +30,7 @@
   "ignorePatterns": [
     "tailwind.config.js",
     "colors.js",
+    "postcss.config.mjs",
     "postcss.config.js",
     "next.config.js",
     "_error.js"

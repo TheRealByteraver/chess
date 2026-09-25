@@ -199,7 +199,7 @@ const Chess = (): JSX.Element => {
   // console.log('gameState', gameState);
 
   return (
-    <Container hCenter vCenter>
+    <Container hCenter>
       <PromotionModal
         isOpen={isModalOpen}
         activeColor={gameInfo?.game.activeColor}
@@ -207,25 +207,23 @@ const Chess = (): JSX.Element => {
       />
       <Header1 text="Welcome to the chess bot!" />
 
-      <div className="flex flex-row justify-center gap-4">
+      <div className="flex flex-col sm:flex-row w-full gap-4 justify-center px-4 sm:mx-0 mb-6">
         {['begin', 'checkmate', 'stalemate', 'draw'].includes(gameState) && (
-          <Button className="mb-6" onClick={startGameHandler}>
-            Start a new Game
-          </Button>
+          <Button onClick={startGameHandler}>Start a new Game</Button>
         )}
-        <Button className="mb-6" onClick={gameModeHandler}>
-          Mode: {gameMode}
-        </Button>
+        <Button onClick={gameModeHandler}>Mode: {gameMode}</Button>
       </div>
 
-      <div className="inline-block border-8 border-[#d28c45]">
-        <ChessBoard>
-          <BoardMarkers markers={gameInfo.boardMarkers} orientation={orientation} />
-          {gameState === 'waitingForUser' && (
-            <ChessInteractiveLayer onClick={playerClickHandler} orientation={orientation} />
-          )}
-          <ChessPieces board={gameInfo.game.board} orientation={orientation} />
-        </ChessBoard>
+      <div className="w-full h-full flex flex-row items-center justify-center">
+        <div className="border-8 border-[#d28c45] grid aspect-square sm:max-w-[640px] w-full">
+          <ChessBoard>
+            <BoardMarkers markers={gameInfo.boardMarkers} orientation={orientation} />
+            {gameState === 'waitingForUser' && (
+              <ChessInteractiveLayer onClick={playerClickHandler} orientation={orientation} />
+            )}
+            <ChessPieces board={gameInfo.game.board} orientation={orientation} />
+          </ChessBoard>
+        </div>
       </div>
     </Container>
   );

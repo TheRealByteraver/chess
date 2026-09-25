@@ -16,37 +16,26 @@ const ChessPieces = (props: Props): JSX.Element => {
   // PROPS
   const { size = 'normal', board, orientation } = props;
 
-  // VARS
-  const mirrored = orientation === 'blackOnBottom';
-  const next = mirrored ? -1 : 1;
-  let squareNr = mirrored ? 63 : 0;
-  const sizeClass = size === 'icon' ? 'w-8 h-8' : 'w-20 h-20';
-
-  const rows: JSX.Element[] = [];
-  for (let j = 0; j < 8; j++) {
-    const row: JSX.Element[] = [];
-    for (let i = 0; i < 8; i++) {
-      const piece = board[squareNr];
-      row.push(
-        <div className={`relative ${sizeClass}`} key={`piece-square-${i}`}>
-          {/* <span className="text-gray-900 font-semibold text-sm ml-1 -mt-1">{squareNr}</span> */}
-          <div className={`absolute top-0 left-0 ${sizeClass}`}>
-            {piece !== EMPTY && (
-              <Image src={SVGPieces[piece].image} alt={SVGPieces[piece].name} fill />
-            )}
-          </div>
-        </div>,
-      );
-      squareNr += next;
-    }
-    rows.push(
-      <div className="flex flex-row" key={`piece-row-${j}`}>
-        {row}
-      </div>,
-    );
-  }
-
-  return <div className="absolute top-0 left-0 pointer-events-none">{rows}</div>;
+  return (
+    <div className="absolute top-0 left-0 w-full pointer-events-none">
+      <div className="grid grid-cols-8 grid-rows-8">
+        {Array.from({ length: 64 }, (_, i) => {
+          const mirrored = orientation === 'blackOnBottom';
+          const squareNr = mirrored ? 63 - i : i;
+          const piece = board[squareNr];
+          return (
+            <div key={`piece-${squareNr}`} className={`aspect-square relative`}>
+              <div className={`absolute top-0 left-0 w-full h-full`}>
+                {piece !== EMPTY && (
+                  <Image src={SVGPieces[piece].image} alt={SVGPieces[piece].name} fill />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 
 export default ChessPieces;

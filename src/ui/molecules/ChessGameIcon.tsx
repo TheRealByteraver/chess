@@ -32,9 +32,11 @@ const ChessGameIcon = (): JSX.Element => {
   const game = index === null ? undefined : getFenGame(famousChessOpenings[index]);
 
   return (
-    <ChessBoard size="icon">
-      {game && <ChessPieces board={game.board} orientation="whiteOnBottom" size="icon" />}
-    </ChessBoard>
+    <div className="w-80">
+      <ChessBoard>
+        {game && <ChessPieces board={game.board} orientation="whiteOnBottom" size="icon" />}
+      </ChessBoard>
+    </div>
   );
 };
 

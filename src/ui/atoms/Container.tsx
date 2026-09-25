@@ -14,7 +14,7 @@ const Container = (props: Props): JSX.Element => {
   const { children, onClick } = props;
 
   const classes = [
-    'flex flex-col',
+    'flex flex-col overflow-y-auto',
     props.hCenter ? 'items-center' : '',
     props.vCenter ? 'h-full justify-center' : '',
   ];
